@@ -8,59 +8,87 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Sonic extends GameObject {
 
-	private float speed = 0;
-	private final float aceleration = (float) 0.2;
-	private final float deceleration = (float) 0.1;
+	private float speedX = 0;
+	private float speedY = 0;
+	private final float finalSpeedX = 10;
+	private final float finalSpeedY = 7;
+	private final float acelerationX = (float) 0.2;
+	private final float decelerationX = (float) 0.1;
+	private final float gravity = (float) 0.1;
+	private float lastJumpTime = 0;
+	private boolean firstJump = false;
 	private float elapsedTime;
 
 	public Sonic() {
-		imagem = new Texture(Gdx.files.internal("sonic.png"));
+		image = new Texture(Gdx.files.internal("sonic.png"));
 		setPosition(320, 240);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(imagem, this.getX(), this.getY(), imagem.getWidth(), imagem.getHeight());
+		batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
 	}
 
-	@Override
 	public void act(float delta) {
 		super.act(delta);
-		move();
+		moveX();
+		moveY();
 		elapsedTime += Gdx.graphics.getDeltaTime();
 	}
 
 	public void dispose() {
-		imagem.dispose();
+		image.dispose();
 	}
 
-	public void move() {
-		
+	public void moveX() {
+
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			if (speed < 10) {
-				speed = (float) (speed + aceleration);
+			if (speedX < finalSpeedX) {
+				speedX = (float) (speedX + acelerationX);
 			}
 		} else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			if (speed > -10) {
-				speed = (float) (speed - aceleration);
+			if (speedX > -finalSpeedX) {
+				speedX = (float) (speedX - acelerationX);
 			}
 		} else {
-			if (speed < 0) {
-				speed = (float) (speed + deceleration);
-				
-				if (speed > 0) {
-					speed = 0;
+			if (speedX < 0) {
+				speedX = (float) (speedX + decelerationX);
+
+				if (speedX > 0) {
+					speedX = 0;
 				}
 			}
-			if (speed > 0) {
-				speed = (float) (speed - deceleration);;
-				
-				if (speed < 0) {
-					speed = 0;
+			if (speedX > 0) {
+				speedX = (float) (speedX - decelerationX);
+
+				if (speedX < 0) {
+					speedX = 0;
 				}
 			}
 		}
-		setX(getX() + speed);
-		System.out.println(getX());
+		setX(getX() + speedX);
+	}
+
+	public void moveY() {
+		System.out.println("ElapsedTime: " + elapsedTime);
+		System.out.println("LastJumpTime: " + lastJumpTime);
+		System.out.println("SpeedY: " + speedY);
+		//speedY = 10;
+		if (Gdx.input.isKeyPressed(Input.Keys.W) && (elapsedTime - lastJumpTime >= 2 || firstJump == false)) {
+			firstJump = true;
+			jump();
+		}
+		if(getY() > 200) {
+			speedY = speedY - gravity;
+		}else if(speedY < 0 && getY() <= 200){
+			speedY = 0;
+		}
+		
+		setY(getY() + speedY);
+	}
+
+	public void jump() {
+		lastJumpTime = elapsedTime;
+		speedY =+ finalSpeedY;
 	}
 }

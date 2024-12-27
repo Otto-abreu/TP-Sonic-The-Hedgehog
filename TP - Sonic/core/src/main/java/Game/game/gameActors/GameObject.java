@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameObject extends Actor{
 	
-	protected Texture imagem;
+	protected Texture image;
 	
 	public GameObject() {
 		// TODO Auto-generated constructor stub

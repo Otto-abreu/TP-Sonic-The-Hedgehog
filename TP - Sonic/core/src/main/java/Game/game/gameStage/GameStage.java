@@ -12,7 +12,7 @@ public class GameStage extends Stage{
 
 	private OrthographicCamera orto;
 	private GameScreen screen;
-
+	
 	public GameStage(GameScreen screen) {
 		super(new ScreenViewport());
 		
