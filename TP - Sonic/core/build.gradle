@@ -6,6 +6,13 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  
+  implementation "com.badlogicgames.gdx:gdx:1.12.1"
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:1.12.1"
+  implementation "com.badlogicgames.gdx:gdx-tools:1.12.1"
+  implementation "com.badlogicgames.gdx:gdx-freetype:1.12.1"
+  implementation "com.badlogicgames.gdx:gdx-tiledmap:1.12.1"
+  
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

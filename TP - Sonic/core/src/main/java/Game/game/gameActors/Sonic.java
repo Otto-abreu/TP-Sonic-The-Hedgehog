@@ -70,10 +70,8 @@ public class Sonic extends GameObject {
 	}
 
 	public void moveY() {
-		System.out.println("ElapsedTime: " + elapsedTime);
-		System.out.println("LastJumpTime: " + lastJumpTime);
-		System.out.println("SpeedY: " + speedY);
-		//speedY = 10;
+		
+		System.out.println("position: " + getX() + " - " + getY());
 		if (Gdx.input.isKeyPressed(Input.Keys.W) && (elapsedTime - lastJumpTime >= 2 || firstJump == false)) {
 			firstJump = true;
 			jump();
@@ -90,5 +88,13 @@ public class Sonic extends GameObject {
 	public void jump() {
 		lastJumpTime = elapsedTime;
 		speedY =+ finalSpeedY;
+	}
+	
+	public float getPositionY() {
+		return getY();
+	}
+	
+	public float getPositionX() {
+		return getX();
 	}
 }
