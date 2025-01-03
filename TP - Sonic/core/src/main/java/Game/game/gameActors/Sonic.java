@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Sonic extends GameObject {
 
+	private Texture image;
 	private float speedX = 0;
 	private float speedY = 0;
 	private final float finalSpeedX = 10;
@@ -20,8 +21,11 @@ public class Sonic extends GameObject {
 	private float elapsedTime;
 
 	public Sonic() {
-		image = new Texture(Gdx.files.internal("sonic.png"));
-		setPosition(320, 240);
+		this.image = new Texture(Gdx.files.internal("sonic.png"));
+		
+		
+		setPosition(20, 350);
+		this.setScale((float )0.5, (float )0.5);
 	}
 
 	@Override

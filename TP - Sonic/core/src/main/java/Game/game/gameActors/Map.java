@@ -12,7 +12,7 @@ public class Map extends Actor {
 
 	private TiledMap tiledMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
-	private static final int ppm = 4;
+	private static final float ppm = 4;
 	OrthographicCamera camera;
 	//private float mapWidth, mapHeight;
 
@@ -22,7 +22,7 @@ public class Map extends Actor {
 		this.camera = camera;
 		tiledMap = new TmxMapLoader().load("Mapa.tmx");
 
-		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
 		
 	}
 
@@ -39,7 +39,7 @@ public class Map extends Actor {
 		super.act(delta);
 	}
 	
-	public static int getPpm() {
+	public static float getPpm() {
 		return ppm;
 	}
 

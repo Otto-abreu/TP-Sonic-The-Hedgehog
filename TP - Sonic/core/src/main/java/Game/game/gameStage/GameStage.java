@@ -25,6 +25,7 @@ public class GameStage extends Stage{
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//camera.zoom = (float) 10;
 		
 		mapa = new Map(camera);
 		
@@ -40,7 +41,7 @@ public class GameStage extends Stage{
 			this.getActors().get(i).act(delta);
 			if(this.getActors().get(i) instanceof Sonic) {
 				Sonic aux = (Sonic) this.getActors().get(i);
-				camera.position.set(aux.getPositionX() + 20, aux.getPositionY(), 0);
+				camera.position.set(aux.getPositionX() + 190, aux.getPositionY() + 200, 0);
 				camera.update();
 				System.out.println(camera.position.x);
 			}
