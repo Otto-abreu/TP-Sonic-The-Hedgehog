@@ -1,10 +1,13 @@
 package Game.game.gameActors;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import Game.game.controllers.InputHandler;
 
 public class Sonic extends GameObject {
 
@@ -20,12 +23,15 @@ public class Sonic extends GameObject {
 	private boolean firstJump = false;
 	private float elapsedTime;
 
+	private InputHandler inputHandler;
+
 	public Sonic() {
 		this.image = new Texture(Gdx.files.internal("sonic.png"));
-		
-		
+
 		setPosition(20, 350);
-		this.setScale((float )0.5, (float )0.5);
+		this.setScale((float) 0.5, (float) 0.5);
+
+		inputHandler = new InputHandler();
 	}
 
 	@Override
@@ -35,8 +41,16 @@ public class Sonic extends GameObject {
 
 	public void act(float delta) {
 		super.act(delta);
-		moveX();
-		moveY();
+		inputHandler.handleYAxisInput(this);
+		if (inputHandler.handleXAxisInput(this) == false) {
+			decelerate();
+		}
+		applyGravity();
+		
+		setY(getY() + speedY);
+
+		setX(getX() + speedX);
+
 		elapsedTime += Gdx.graphics.getDeltaTime();
 	}
 
@@ -44,61 +58,115 @@ public class Sonic extends GameObject {
 		image.dispose();
 	}
 
-	public void moveX() {
+	public void decelerate() {
+		if (speedX < 0) {
+			speedX = (float) (speedX + decelerationX);
 
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			if (speedX < finalSpeedX) {
-				speedX = (float) (speedX + acelerationX);
-			}
-		} else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			if (speedX > -finalSpeedX) {
-				speedX = (float) (speedX - acelerationX);
-			}
-		} else {
-			if (speedX < 0) {
-				speedX = (float) (speedX + decelerationX);
-
-				if (speedX > 0) {
-					speedX = 0;
-				}
-			}
 			if (speedX > 0) {
-				speedX = (float) (speedX - decelerationX);
-
-				if (speedX < 0) {
-					speedX = 0;
-				}
+				speedX = 0;
 			}
 		}
-		setX(getX() + speedX);
-	}
+		if (speedX > 0) {
+			speedX = (float) (speedX - decelerationX);
 
-	public void moveY() {
-		
-		System.out.println("position: " + getX() + " - " + getY());
-		if (Gdx.input.isKeyPressed(Input.Keys.W) && (elapsedTime - lastJumpTime >= 2 || firstJump == false)) {
-			firstJump = true;
-			jump();
+			if (speedX < 0) {
+				speedX = 0;
+			}
 		}
-		if(getY() > 200) {
+	}
+	
+	public void applyGravity() {
+		if (getY() > 200) {
 			speedY = speedY - gravity;
-		}else if(speedY < 0 && getY() <= 200){
+		} else if (speedY < 0 && getY() <= 200) {
 			speedY = 0;
 		}
-		
-		setY(getY() + speedY);
 	}
 
-	public void jump() {
-		lastJumpTime = elapsedTime;
-		speedY =+ finalSpeedY;
+	/*
+	 * public void moveX() {
+	 * 
+	 * if (Gdx.input.isKeyPressed(Input.Keys.D)) { if (speedX < finalSpeedX) {
+	 * speedX = (float) (speedX + acelerationX); } } else if
+	 * (Gdx.input.isKeyPressed(Input.Keys.A)) { if (speedX > -finalSpeedX) { speedX
+	 * = (float) (speedX - acelerationX); } } else { if (speedX < 0) { speedX =
+	 * (float) (speedX + decelerationX);
+	 * 
+	 * if (speedX > 0) { speedX = 0; } } if (speedX > 0) { speedX = (float) (speedX
+	 * - decelerationX);
+	 * 
+	 * if (speedX < 0) { speedX = 0; } } } setX(getX() + speedX); }
+	 */
+	/*
+	 * public void moveY() {
+	 * 
+	 * if (Gdx.input.isKeyPressed(Input.Keys.W) && (elapsedTime - lastJumpTime >= 2
+	 * || firstJump == false)) { firstJump = true; jump(); } if(getY() > 200) {
+	 * speedY = speedY - gravity; }else if(speedY < 0 && getY() <= 200){ speedY = 0;
+	 * }
+	 * 
+	 * setY(getY() + speedY); }
+	 * 
+	 * public void jump() { lastJumpTime = elapsedTime; speedY =+ finalSpeedY; }
+	 */
+	public float getSpeedX() {
+		return speedX;
 	}
-	
-	public float getPositionY() {
-		return getY();
+
+	public void setSpeedX(float speedX) {
+		this.speedX = speedX;
 	}
-	
-	public float getPositionX() {
-		return getX();
+
+	public float getSpeedY() {
+		return speedY;
 	}
+
+	public void setSpeedY(float speedY) {
+		this.speedY = speedY;
+	}
+
+	public float getLastJumpTime() {
+		return lastJumpTime;
+	}
+
+	public void setLastJumpTime(float lastJumpTime) {
+		this.lastJumpTime = lastJumpTime;
+	}
+
+	public boolean isFirstJump() {
+		return firstJump;
+	}
+
+	public void setFirstJump(boolean firstJump) {
+		this.firstJump = firstJump;
+	}
+
+	public float getElapsedTime() {
+		return elapsedTime;
+	}
+
+	public void setElapsedTime(float elapsedTime) {
+		this.elapsedTime = elapsedTime;
+	}
+
+	public float getFinalSpeedX() {
+		return finalSpeedX;
+	}
+
+	public float getFinalSpeedY() {
+		return finalSpeedY;
+	}
+
+	public float getAcelerationX() {
+		return acelerationX;
+	}
+
+	public float getDecelerationX() {
+		return decelerationX;
+	}
+
+	public float getGravity() {
+		return gravity;
+	}
+
 }
