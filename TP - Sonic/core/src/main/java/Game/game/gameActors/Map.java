@@ -20,7 +20,7 @@ public class Map extends Actor {
 		super();
 		
 		this.camera = camera;
-		tiledMap = new TmxMapLoader().load("Mapa.tmx");
+		tiledMap = new TmxMapLoader().load("Mapa2.tmx");
 
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
 		
