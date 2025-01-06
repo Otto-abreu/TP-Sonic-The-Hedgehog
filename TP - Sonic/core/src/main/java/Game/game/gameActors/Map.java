@@ -8,15 +8,24 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Map extends Actor {
+public class Map extends GameObject {
 
 	private TiledMap tiledMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private static final float ppm = 4;
-	OrthographicCamera camera;
-	//private float mapWidth, mapHeight;
+	private OrthographicCamera camera;
+	private static Map instance;
+	private static final float gravity = (float) 0.1;
 
-	public Map(OrthographicCamera camera) {
+	//private float mapWidth, mapHeight;
+	
+	public static Map getInstance(OrthographicCamera camera) {
+		if(instance == null) {
+			instance = new Map(camera);
+		}
+		return instance;
+	}
+	private Map(OrthographicCamera camera) {
 		super();
 		
 		this.camera = camera;
@@ -41,6 +50,10 @@ public class Map extends Actor {
 	
 	public static float getPpm() {
 		return ppm;
+	}
+	
+	public static float getGravity() {
+		return gravity;
 	}
 
 }

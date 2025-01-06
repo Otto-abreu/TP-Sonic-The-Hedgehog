@@ -27,9 +27,9 @@ public class GameStage extends Stage{
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//camera.zoom = (float) 10;
 		
-		mapa = new Map(camera);
+		mapa = Map.getInstance(camera);
 		
-		this.addActor(new Sonic());
+		this.addActor(Sonic.getInstance());
 		this.addActor(mapa);
 		
 	}

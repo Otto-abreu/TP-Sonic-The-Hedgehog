@@ -18,14 +18,21 @@ public class Sonic extends GameObject {
 	private final float finalSpeedY = 7;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
-	private final float gravity = (float) 0.1;
 	private float lastJumpTime = 0;
 	private boolean firstJump = false;
 	private float elapsedTime;
+	private static Sonic instance;
 
 	private InputHandler inputHandler;
 
-	public Sonic() {
+	
+	public static Sonic getInstance() {
+		if(instance == null) {
+			instance = new Sonic();
+		}
+		return instance;
+	}
+	private Sonic() {
 		this.image = new Texture(Gdx.files.internal("sonic.png"));
 
 		setPosition(20, 350);
@@ -77,38 +84,12 @@ public class Sonic extends GameObject {
 	
 	public void applyGravity() {
 		if (getY() > 200) {
-			speedY = speedY - gravity;
+			speedY = speedY - Map.getGravity();
 		} else if (speedY < 0 && getY() <= 200) {
 			speedY = 0;
 		}
 	}
 
-	/*
-	 * public void moveX() {
-	 * 
-	 * if (Gdx.input.isKeyPressed(Input.Keys.D)) { if (speedX < finalSpeedX) {
-	 * speedX = (float) (speedX + acelerationX); } } else if
-	 * (Gdx.input.isKeyPressed(Input.Keys.A)) { if (speedX > -finalSpeedX) { speedX
-	 * = (float) (speedX - acelerationX); } } else { if (speedX < 0) { speedX =
-	 * (float) (speedX + decelerationX);
-	 * 
-	 * if (speedX > 0) { speedX = 0; } } if (speedX > 0) { speedX = (float) (speedX
-	 * - decelerationX);
-	 * 
-	 * if (speedX < 0) { speedX = 0; } } } setX(getX() + speedX); }
-	 */
-	/*
-	 * public void moveY() {
-	 * 
-	 * if (Gdx.input.isKeyPressed(Input.Keys.W) && (elapsedTime - lastJumpTime >= 2
-	 * || firstJump == false)) { firstJump = true; jump(); } if(getY() > 200) {
-	 * speedY = speedY - gravity; }else if(speedY < 0 && getY() <= 200){ speedY = 0;
-	 * }
-	 * 
-	 * setY(getY() + speedY); }
-	 * 
-	 * public void jump() { lastJumpTime = elapsedTime; speedY =+ finalSpeedY; }
-	 */
 	public float getSpeedX() {
 		return speedX;
 	}
@@ -163,10 +144,6 @@ public class Sonic extends GameObject {
 
 	public float getDecelerationX() {
 		return decelerationX;
-	}
-
-	public float getGravity() {
-		return gravity;
 	}
 
 }
