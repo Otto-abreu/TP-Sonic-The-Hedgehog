@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
-import Game.game.controllers.InputHandler;
+import Game.game.commander.InputHandler;
 
 public class Sonic extends GameObject {
 
