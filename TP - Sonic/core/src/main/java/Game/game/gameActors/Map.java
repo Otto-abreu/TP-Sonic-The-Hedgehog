@@ -12,7 +12,7 @@ public class Map extends GameObject {
 
 	private TiledMap tiledMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
-	private static final float ppm = 4;
+	private static final float ppm = 2;
 	private OrthographicCamera camera;
 	private static Map instance;
 	private static final float gravity = (float) 0.1;
@@ -29,7 +29,7 @@ public class Map extends GameObject {
 		super();
 		
 		this.camera = camera;
-		tiledMap = new TmxMapLoader().load("Mapa2.tmx");
+		tiledMap = new TmxMapLoader().load("Mapa.tmx");
 
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
 		
@@ -54,6 +54,9 @@ public class Map extends GameObject {
 	
 	public static float getGravity() {
 		return gravity;
+	}
+	public TiledMap getMap() {
+		return tiledMap;
 	}
 
 }

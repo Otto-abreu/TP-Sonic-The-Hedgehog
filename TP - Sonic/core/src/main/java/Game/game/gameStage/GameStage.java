@@ -3,6 +3,7 @@ package Game.game.gameStage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -29,7 +30,7 @@ public class GameStage extends Stage{
 		
 		mapa = Map.getInstance(camera);
 		
-		this.addActor(Sonic.getInstance());
+		this.addActor(Sonic.getInstance((TiledMapTileLayer)mapa.getMap().getLayers().get("Camada de Blocos 1")));
 		this.addActor(mapa);
 		
 	}
