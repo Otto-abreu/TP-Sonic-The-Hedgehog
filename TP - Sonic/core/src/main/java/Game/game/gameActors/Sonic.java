@@ -16,13 +16,11 @@ public class Sonic extends GameObject {
 
 	private Texture image;
 	private Vector2 speed;
-	private int floor = 650;
-	private final float finalSpeedX = 10;
-	private final float finalSpeedY = 7;
+	private final float finalSpeedX = 5;
+	private final float finalSpeedY = 5;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
-	private float lastJumpTime = 0;
-	private boolean firstJump = false;
+	private boolean jumpEnabled = false;
 	private float elapsedTime;
 	private static Sonic instance;
 
@@ -66,15 +64,15 @@ public class Sonic extends GameObject {
 		}
 		applyGravity();
 
-		setY(getY() + speed.y);
-		
 		float oldX = getX();
 		setX(getX() + speed.x);
-		handleCollisionX(oldX);
-		
+
+		float oldY = getY();
+		setY(getY() + speed.y);
+
+		handleCollision(oldX, oldY);
+
 		elapsedTime += Gdx.graphics.getDeltaTime();
-
-
 
 	}
 
@@ -100,39 +98,113 @@ public class Sonic extends GameObject {
 		}
 	}
 
-	public void handleCollisionX(float oldX) {
-		float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
-		boolean collisionX = false, collisionY = false;
+	public void handleCollision(float oldX, float oldY) {
+		checkCollisionOnX(oldX);
+		checkCollisionOnY(oldY);
+	}
 
-		// MapProperties mapProperties = collisionLayer.getCell((int)((getX() +
-		// getWidth()) / tileWidth/2), (int)((getY() + getHeight()) /
-		// tileHeight/2)).getTile().getProperties();
+	public void checkCollisionOnX(float oldX) {
+
+		boolean collisionX = false;
 
 		if (speed.x > 0) {
-			// middle right
+			// collision: blocks on the right
+			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 			Vector2 rightMiddleBlockPos, rightTopBlockPos, rightBottomBlockPos;
-			rightMiddleBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
-					(getY() + getHeight() / 2) / (tileHeight / 2));
 			rightTopBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
 					(getY() + getHeight()) / (tileHeight / 2));
+			rightMiddleBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
+					(getY() + getHeight() / 2) / (tileHeight / 2));
 			rightBottomBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2), getY() / (tileHeight / 2));
 
-			Cell cell = collisionLayer.getCell((int) rightMiddleBlockPos.x, (int) rightMiddleBlockPos.y);
+			Cell cellMiddle = collisionLayer.getCell((int) rightMiddleBlockPos.x, (int) rightMiddleBlockPos.y);
 			Cell cellTop = collisionLayer.getCell((int) rightTopBlockPos.x, (int) rightTopBlockPos.y);
 			Cell cellBottom = collisionLayer.getCell((int) rightBottomBlockPos.x, (int) rightBottomBlockPos.y);
-			
+
 			collisionX = checkCellCollision(cellTop);
 			if (collisionX == false)
-				collisionX = checkCellCollision(cell);
-			if (collisionX == false)
-				collisionX = checkCellCollision(cellBottom);
+				collisionX = checkCellCollision(cellMiddle);
+			/*
+			 * if (collisionX == false) collisionX = checkCellCollision(cellBottom);
+			 */
 		}
-		
-		if(collisionX == true) {
+
+		else if (speed.x < 0) {
+			// collision: blocks on the left
+			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
+			Vector2 leftMiddleBlockPos, leftTopBlockPos, leftBottomBlockPos;
+
+			leftTopBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight()) / (tileHeight / 2));
+			leftMiddleBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight() / 2) / (tileHeight / 2));
+			leftBottomBlockPos = new Vector2(getX() / (tileWidth / 2), getY() / (tileHeight / 2));
+
+			Cell cellTop = collisionLayer.getCell((int) leftTopBlockPos.x, (int) leftTopBlockPos.y);
+			Cell cellMiddle = collisionLayer.getCell((int) leftMiddleBlockPos.x, (int) leftMiddleBlockPos.y);
+			Cell cellBottom = collisionLayer.getCell((int) leftBottomBlockPos.x, (int) leftBottomBlockPos.y);
+
+			collisionX = checkCellCollision(cellTop);
+			if (collisionX == false)
+				collisionX = checkCellCollision(cellMiddle);
+			/*
+			 * if (collisionX == false) collisionX = checkCellCollision(cellBottom);
+			 */
+		}
+
+		if (collisionX == true) {
 			setX(oldX);
 			speed.x = 0;
 		}
 
+	}
+
+	public void checkCollisionOnY(float oldY) {
+
+		boolean collisionY = false;
+
+		if (speed.y > 0) {
+			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
+			Vector2 topMiddleBlockPos, topLeftBlockPos, topRightBlockPos;
+
+			topLeftBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight()) / (tileHeight/2));
+			topMiddleBlockPos = new Vector2(((getX() + getWidth()/2) / (tileWidth/2)), (getY() + getHeight()) / (tileHeight/2));
+			topRightBlockPos = new Vector2((getX() + getWidth()/2), (getY() + getHeight()) / (tileHeight/2));
+			
+			Cell cellLeft = collisionLayer.getCell((int) topLeftBlockPos.x, (int) topLeftBlockPos.y);
+			Cell cellMiddle = collisionLayer.getCell((int) topMiddleBlockPos.x, (int) topMiddleBlockPos.y);
+			Cell cellRight = collisionLayer.getCell((int) topRightBlockPos.x, (int) topRightBlockPos.y);
+
+			collisionY = checkCellCollision(cellLeft);
+			if (collisionY == false)
+				collisionY = checkCellCollision(cellMiddle);
+			if (collisionY == false)
+				collisionY = checkCellCollision(cellRight);
+			
+		} else if (speed.y < 0) {
+			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
+			Vector2 bottomMiddleBlockPos, bottomLeftBlockPos, bottomRightBlockPos;
+
+			bottomLeftBlockPos = new Vector2(getX() / (tileWidth / 2), getY() / (tileHeight / 2));
+			bottomMiddleBlockPos = new Vector2((getX() + getWidth() / 2) / (tileWidth / 2), getY() / (tileHeight / 2));
+			bottomRightBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2), getY() / (tileHeight / 2));
+
+			Cell cellLeft = collisionLayer.getCell((int) bottomLeftBlockPos.x, (int) bottomLeftBlockPos.y);
+			Cell cellMiddle = collisionLayer.getCell((int) bottomMiddleBlockPos.x, (int) bottomMiddleBlockPos.y);
+			Cell cellRight = collisionLayer.getCell((int) bottomRightBlockPos.x, (int) bottomRightBlockPos.y);
+
+			collisionY = checkCellCollision(cellLeft);
+			if (collisionY == false)
+				collisionY = checkCellCollision(cellMiddle);
+			if (collisionY == false)
+				collisionY = checkCellCollision(cellRight);
+		}
+
+		if (collisionY == true) {
+			setY(oldY);
+			speed.y = 0;
+			jumpEnabled = true;
+		} else {
+			jumpEnabled = false;
+		}
 	}
 
 	private boolean checkCellCollision(Cell cell) {
@@ -147,11 +219,7 @@ public class Sonic extends GameObject {
 	}
 
 	private void applyGravity() {
-		if (getY() > floor) {
-			speed.y = speed.y - Map.getGravity();
-		} else if (speed.y < 0 && getY() <= floor) {
-			speed.y = 0;
-		}
+		speed.y = speed.y - Map.getGravity();
 	}
 
 	public float getSpeedX() {
@@ -168,22 +236,6 @@ public class Sonic extends GameObject {
 
 	public void setSpeedY(float speedY) {
 		this.speed.y = speedY;
-	}
-
-	public float getLastJumpTime() {
-		return lastJumpTime;
-	}
-
-	public void setLastJumpTime(float lastJumpTime) {
-		this.lastJumpTime = lastJumpTime;
-	}
-
-	public boolean isFirstJump() {
-		return firstJump;
-	}
-
-	public void setFirstJump(boolean firstJump) {
-		this.firstJump = firstJump;
 	}
 
 	public float getElapsedTime() {
@@ -208,6 +260,14 @@ public class Sonic extends GameObject {
 
 	public float getDecelerationX() {
 		return decelerationX;
+	}
+
+	public boolean isJumpEnabled() {
+		return jumpEnabled;
+	}
+
+	public void setJumpEnabled(boolean jumpEnabled) {
+		this.jumpEnabled = jumpEnabled;
 	}
 
 }

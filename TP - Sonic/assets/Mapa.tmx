@@ -17,6 +17,16 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="6">
+   <properties>
+    <property name="rampRight" value=""/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="rampLeft" value=""/>
+   </properties>
+  </tile>
  </tileset>
  <layer id="1" name="Camada de Blocos 1" width="500" height="20" locked="1">
   <data encoding="csv">

@@ -13,22 +13,14 @@ public class JumpCommander extends Commander {
 
 	@Override
 	public void executar(Sonic sonic) {
-		moveY(sonic);
-	}
-
-	public void moveY(Sonic sonic) {
-		if (sonic.getElapsedTime() - sonic.getLastJumpTime() >= 5 || sonic.isFirstJump() == false) {
-			sonic.setFirstJump(true);
-
-			jump(sonic);
-		}
-		//sonic.setY(sonic.getY() + sonic.getSpeedY());
+		jump(sonic);
 	}
 
 	public void jump(Sonic sonic) {
-		sonic.setLastJumpTime(sonic.getElapsedTime());
-		sonic.setSpeedY(sonic.getSpeedY() + sonic.getFinalSpeedY());
-		System.out.println("speed:" + sonic.getSpeedY());
+		if (sonic.isJumpEnabled()) {
+
+			sonic.setSpeedY(sonic.getSpeedY() + sonic.getFinalSpeedY());
+		}
 	}
 
 }
