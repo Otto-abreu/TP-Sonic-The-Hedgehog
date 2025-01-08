@@ -23,6 +23,7 @@ public class Sonic extends GameObject {
 	private boolean jumpEnabled = false;
 	private float elapsedTime;
 	private static Sonic instance;
+	private Vector2 initialPosition;
 
 	private InputHandler inputHandler;
 
@@ -38,7 +39,8 @@ public class Sonic extends GameObject {
 	private Sonic(TiledMapTileLayer collisionLayer) {
 		this.image = new Texture(Gdx.files.internal("sonic.png"));
 
-		setPosition(20, 1000);
+		setPosition(21110, 2000);
+		initialPosition = new Vector2(getX(), getY());
 		this.setScale((float) 0.5, (float) 0.5);
 
 		inputHandler = new InputHandler();
@@ -73,6 +75,12 @@ public class Sonic extends GameObject {
 		handleCollision(oldX, oldY);
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
+		
+		if(getY() < -10) {
+			reSpawn();
+		}
+		
+		System.out.println(getX() + " - " + getY());
 
 	}
 
@@ -211,7 +219,6 @@ public class Sonic extends GameObject {
 		boolean returnValue = false;
 		if (cell != null) {
 			if (cell.getTile().getProperties().containsKey("blocked")) {
-				System.out.println("COLISAO");
 				returnValue = true;
 			}
 		}
@@ -220,6 +227,10 @@ public class Sonic extends GameObject {
 
 	private void applyGravity() {
 		speed.y = speed.y - Map.getGravity();
+	}
+	private void reSpawn() {
+		setPosition(initialPosition.x, initialPosition.y);
+
 	}
 
 	public float getSpeedX() {

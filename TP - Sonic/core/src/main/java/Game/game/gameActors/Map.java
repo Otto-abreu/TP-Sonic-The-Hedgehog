@@ -16,6 +16,7 @@ public class Map extends GameObject {
 	private OrthographicCamera camera;
 	private static Map instance;
 	private static final float gravity = (float) 0.1;
+	private int mapSelected = 2;
 
 	//private float mapWidth, mapHeight;
 	
@@ -29,7 +30,7 @@ public class Map extends GameObject {
 		super();
 		
 		this.camera = camera;
-		tiledMap = new TmxMapLoader().load("Mapa.tmx");
+		tiledMap = new TmxMapLoader().load("Mapa3.tmx");
 
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
 		
@@ -57,6 +58,10 @@ public class Map extends GameObject {
 	}
 	public TiledMap getMap() {
 		return tiledMap;
+	}
+	
+	public int getMapSelected() {
+		return mapSelected;
 	}
 
 }

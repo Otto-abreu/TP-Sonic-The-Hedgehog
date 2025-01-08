@@ -30,7 +30,7 @@ public class GameStage extends Stage{
 		
 		mapa = Map.getInstance(camera);
 		
-		this.addActor(Sonic.getInstance((TiledMapTileLayer)mapa.getMap().getLayers().get("Camada de Blocos 1")));
+		this.addActor(Sonic.getInstance((TiledMapTileLayer)mapa.getMap().getLayers().get("1")));
 		this.addActor(mapa);
 		
 	}
