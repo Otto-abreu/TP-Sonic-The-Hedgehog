@@ -2,9 +2,11 @@ package Game.game.gameActors;
 
 import com.badlogic.gdx.Gdx;
 
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -14,14 +16,14 @@ import Game.game.commander.InputHandler;
 
 public class Sonic extends GameObject {
 
-	private Texture image;
 	private Vector2 speed;
+	private int lives = 10;
+	private Vector2 oldPosition;
 	private final float finalSpeedX = 5;
 	private final float finalSpeedY = 5;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
 	private boolean jumpEnabled = false;
-	private float elapsedTime;
 	private static Sonic instance;
 	private Vector2 initialPosition;
 
@@ -37,27 +39,28 @@ public class Sonic extends GameObject {
 	}
 
 	private Sonic(TiledMapTileLayer collisionLayer) {
-		this.image = new Texture(Gdx.files.internal("sonic.png"));
-
-		setPosition(21110, 2000);
+		image = new Sprite(new Texture(Gdx.files.internal("sonic.png")));
+		
+		setPosition(100, 1000);
 		initialPosition = new Vector2(getX(), getY());
-		this.setScale((float) 0.5, (float) 0.5);
 
 		inputHandler = new InputHandler();
 
 		this.speed = new Vector2();
+		this.oldPosition = new Vector2();
 
 		this.collisionLayer = collisionLayer;
 
 		setWidth(64);
 		setHeight(64);
 	}
-
+	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
 	}
-
+	
+	@Override
 	public void act(float delta) {
 		super.act(delta);
 		inputHandler.handleYAxisInput(this);
@@ -66,13 +69,13 @@ public class Sonic extends GameObject {
 		}
 		applyGravity();
 
-		float oldX = getX();
+		oldPosition.x = getX();
 		setX(getX() + speed.x);
 
-		float oldY = getY();
+		oldPosition.y = getY();
 		setY(getY() + speed.y);
 
-		handleCollision(oldX, oldY);
+		handleCollision(oldPosition.x, oldPosition.y);
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		
@@ -82,10 +85,6 @@ public class Sonic extends GameObject {
 		
 		System.out.println(getX() + " - " + getY());
 
-	}
-
-	public void dispose() {
-		image.dispose();
 	}
 
 	public void decelerate() {
@@ -230,6 +229,8 @@ public class Sonic extends GameObject {
 	}
 	private void reSpawn() {
 		setPosition(initialPosition.x, initialPosition.y);
+		lives--;
+		System.out.println(lives);
 
 	}
 

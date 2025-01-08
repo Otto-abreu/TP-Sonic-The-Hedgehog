@@ -30,7 +30,7 @@ public class Map extends GameObject {
 		super();
 		
 		this.camera = camera;
-		tiledMap = new TmxMapLoader().load("Mapa3.tmx");
+		tiledMap = new TmxMapLoader().load("Mapa.tmx");
 
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
 		

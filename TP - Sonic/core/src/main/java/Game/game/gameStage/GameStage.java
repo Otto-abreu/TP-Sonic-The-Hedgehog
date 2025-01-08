@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import Game.game.gameActors.BuzzBomber;
+import Game.game.gameActors.CrabMeat;
+import Game.game.gameActors.Eggman;
 import Game.game.gameActors.Map;
 import Game.game.gameActors.Sonic;
 import Game.game.gameScreen.GameScreen;
@@ -32,6 +35,10 @@ public class GameStage extends Stage{
 		
 		this.addActor(Sonic.getInstance((TiledMapTileLayer)mapa.getMap().getLayers().get("1")));
 		this.addActor(mapa);
+		this.addActor(new CrabMeat());
+		this.addActor(new BuzzBomber());
+		this.addActor(new Eggman());
+
 		
 	}
 	@Override
