@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,11 +17,15 @@ public class GameStage extends Stage {
 	private OrthographicCamera camera;
 	private Map mapa;
 	private Sonic sonic;
+	private Music music;
 
 	public GameStage(GameScreen screen) {
 		super(new ScreenViewport());
 		Gdx.input.setInputProcessor(this);
-
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("music.wav"));
+		music.setLooping(true);
+		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		// camera.zoom = (float) 10;
@@ -41,7 +46,13 @@ public class GameStage extends Stage {
 
 	@Override
 	public void act(float delta) {
+		
 		super.act(delta);
+		
+		if(!music.isPlaying()) {
+			music.play();
+		}
+		
 		for (int i = 0; i < this.getActors().size; i++) {
 
 			this.getActors().get(i).act(delta);
