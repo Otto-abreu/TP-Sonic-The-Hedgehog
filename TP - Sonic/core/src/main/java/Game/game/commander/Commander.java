@@ -1,6 +1,6 @@
 package Game.game.commander;
 
-import Game.game.gameActors.Sonic;
+import Game.game.gameObjects.Sonic;
 
 public abstract class Commander {
 

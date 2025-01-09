@@ -1,4 +1,4 @@
-package Game.game.gameActors;
+package Game.game.gameObjects;
 
 public abstract class Enemy extends GameObject{
 	

@@ -1,19 +1,21 @@
-package Game.game.gameActors;
+package Game.game.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 
-public class BuzzBomber extends Enemy {
+public class JumpPad extends GameObject{
 
-	public BuzzBomber() {
-		image = new Sprite(new Texture(Gdx.files.internal("mosca.jpg")));
-		image.setSize(128, 128);
-
-		setPosition(200, 800);
+	public JumpPad(float posX, float posY) {
+		image = new Sprite(new Texture(Gdx.files.internal("trampolim.png")));
+		image.setSize(64, 64);
+		setPosition(posX, posY);
 		setWidth(64);
 		setHeight(64);
+		
+		this.bounds = image.getBoundingRectangle();
 	}
 	
 	@Override
@@ -25,5 +27,10 @@ public class BuzzBomber extends Enemy {
 	public void act(float delta) {
 		super.act(delta);
 	}
+	
+	public Rectangle getBounds() {
+		return this.bounds;
+	}
+
 
 }

@@ -1,4 +1,4 @@
-package Game.game.gameActors;
+package Game.game.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

@@ -1,9 +1,5 @@
 package Game.game.commander;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-
-import Game.game.gameActors.Sonic;
+import Game.game.gameObjects.Sonic;
 
 public class WalkLeftCommander extends Commander {
 
