@@ -1,5 +1,7 @@
 package Game.game.gameObjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,30 +11,35 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Map extends GameObject {
 
-	private TiledMap tiledMap;
+	private TiledMap map1;
+	private TiledMap map2;
+	private TiledMap map3;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private static final float ppm = 2;
 	private OrthographicCamera camera;
 	private static Map instance;
 	private static final float gravity = (float) 0.1;
-	private int mapSelected = 2;
+	private int mapSelected = 1;
 
-	//private float mapWidth, mapHeight;
-	
+	// private float mapWidth, mapHeight;
+
 	public static Map getInstance(OrthographicCamera camera) {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new Map(camera);
 		}
 		return instance;
 	}
+
 	private Map(OrthographicCamera camera) {
 		super();
-		
-		this.camera = camera;
-		tiledMap = new TmxMapLoader().load("Mapa.tmx");
 
-		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/ppm);
-		
+		this.camera = camera;
+		map1 = new TmxMapLoader().load("Mapa.tmx");
+		map2 = new TmxMapLoader().load("Mapa2.tmx");
+		map3 = new TmxMapLoader().load("Mapa3.tmx");
+
+		mapRenderer = new OrthogonalTiledMapRenderer(map1, 1 / ppm);
+
 	}
 
 	@Override
@@ -46,19 +53,53 @@ public class Map extends GameObject {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		//update();
 	}
-	
+
+	public void chengeMap(int mapId) {
+		TiledMap aux = new TiledMap();
+		
+		if(mapId == 2) {
+			aux = map2;
+			mapSelected = 2;
+		}else if(mapId == 3) {
+			aux = map3;
+			mapSelected = 3;
+		}
+		
+		mapRenderer = new OrthogonalTiledMapRenderer(aux, 1/ppm);
+	}
+
 	public static float getPpm() {
 		return ppm;
 	}
-	
+
 	public static float getGravity() {
 		return gravity;
 	}
+
 	public TiledMap getMap() {
-		return tiledMap;
+		TiledMap returnValue = null;
+
+		switch (mapSelected) {
+		case 1:
+			returnValue = map1;
+			break;
+
+		case 2:
+			returnValue = map2;
+			break;
+
+		case 3:
+			returnValue = map3;
+			break;
+
+		default:
+			break;
+		}
+		return returnValue;
 	}
-	
+
 	public int getMapSelected() {
 		return mapSelected;
 	}

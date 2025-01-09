@@ -39,7 +39,7 @@ public class Sonic extends GameObject {
 	private Sonic(TiledMapTileLayer collisionLayer) {
 		image = new Sprite(new Texture(Gdx.files.internal("sonic.png")));
 
-		setPosition(4400, 2000);
+		setPosition(100, 1000);
 		initialPosition = new Vector2(getX(), getY());
 
 		inputHandler = new InputHandler();
@@ -53,6 +53,7 @@ public class Sonic extends GameObject {
 
 		setWidth(64);
 		setHeight(64);
+		
 	}
 
 	@Override
@@ -62,17 +63,27 @@ public class Sonic extends GameObject {
 
 	@Override
 	public void act(float delta) {
+		
 		super.act(delta);
+		
+		update();
+		
+		System.out.println(getX() + " - " + getY());
+
+	}
+	
+	private void update() {
+		
 		inputHandler.handleYAxisInput(this);
 		if (inputHandler.handleXAxisInput(this) == false) {
 			decelerate();
 		}
-
+		
 		if (jumpPadTouched == true) {
 			speed.y = jumpPadLaunchSpeed;
 			jumpPadTouched = false;
 		}
-
+		
 		applyGravity();
 
 		oldPosition.x = getX();
@@ -88,8 +99,6 @@ public class Sonic extends GameObject {
 		if (getY() < -10) {
 			reSpawn();
 		}
-
-
 	}
 
 	public boolean checkJumpPadTouch(JumpPad jumpPad) {
@@ -126,6 +135,9 @@ public class Sonic extends GameObject {
 		checkCollisionOnY(oldY);
 	}
 
+	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
+		this.collisionLayer = collisionLayer;
+	}
 	public void checkCollisionOnX(float oldX) {
 
 		boolean collisionX = false;
@@ -248,8 +260,6 @@ public class Sonic extends GameObject {
 	private void reSpawn() {
 		setPosition(initialPosition.x, initialPosition.y);
 		lives--;
-		System.out.println(lives);
-
 	}
 
 	public float getSpeedX() {
@@ -298,6 +308,10 @@ public class Sonic extends GameObject {
 
 	public void setJumpEnabled(boolean jumpEnabled) {
 		this.jumpEnabled = jumpEnabled;
+	}
+	public void setInitialPosition() {
+		this.setX(initialPosition.x);
+		this.setY(initialPosition.y);
 	}
 
 }

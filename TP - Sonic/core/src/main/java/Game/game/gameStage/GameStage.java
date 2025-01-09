@@ -3,13 +3,11 @@ package Game.game.gameStage;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-
 import Game.game.gameObjects.*;
 import Game.game.gameScreen.GameScreen;
 
@@ -36,7 +34,8 @@ public class GameStage extends Stage {
 		this.addActor(new CrabMeat());
 		this.addActor(new BuzzBomber());
 		this.addActor(new Eggman());
-		this.addActor(new JumpPad((float) 4479.9, 128));
+
+		this.addActor(new JumpPad((float) 4479.9, 128, 1));
 
 	}
 
@@ -52,25 +51,58 @@ public class GameStage extends Stage {
 				camera.update();
 			}
 		}
-		ArrayList<JumpPad> jumpPads = getCloseJumpPads();
-		for (int i = 0; i < jumpPads.size(); i++) {
-			sonic.checkJumpPadTouch(jumpPads.get(i));
+		ArrayList<JumpPad> closeJumpPads = getCloserJumpPad();
+		if (closeJumpPads != null) {
+			for(int i = 0; i < closeJumpPads.size(); i++) {
+				sonic.checkJumpPadTouch(closeJumpPads.get(i));
+			}
 		}
+
+		handleLevelChange();
 	}
 
-	public ArrayList<JumpPad> getCloseJumpPads() {
-		ArrayList<JumpPad> closeJumpPads = new ArrayList<JumpPad>();
+	public ArrayList<JumpPad> getCloserJumpPad() {
+		
+		ArrayList<JumpPad> jumpPads = new ArrayList<JumpPad>();
+		int counter = 0;
+		JumpPad aux = null;
+
+
 		for (int i = 0; i < this.getActors().size; i++) {
 			if (this.getActors().get(i) instanceof JumpPad) {
-				JumpPad aux = (JumpPad) this.getActors().get(i);
-				if (sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
-						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50) {
-					closeJumpPads.add(aux);
+				counter++;
+				System.out.println(counter);
+				aux = (JumpPad) this.getActors().get(i);
+				if ((sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
+						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50) == false) {
+					aux = null;
+				} else {
+					jumpPads.add(aux);
 				}
 			}
 		}
-		return closeJumpPads;
+		return jumpPads;
 
+	}
+
+	public void handleLevelChange() {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.M) && mapa.getMapSelected() == 1) {
+			mapa.chengeMap(2);
+			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
+			sonic.setInitialPosition();
+			for (int i = 0; i < getActors().size; i++) {
+				if (this.getActors().get(i) instanceof JumpPad) {
+					this.getActors().removeIndex(i);
+				}
+			}
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.M) && mapa.getMapSelected() == 2) {
+			mapa.chengeMap(3);
+			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
+			sonic.setInitialPosition();
+			this.addActor(new JumpPad((float) 16959.89, 128, 3));
+			this.addActor(new JumpPad((float) 18431, 128, 3));
+			this.addActor(new JumpPad((float) 18111, 576, 3));
+		}
 	}
 
 	@Override
