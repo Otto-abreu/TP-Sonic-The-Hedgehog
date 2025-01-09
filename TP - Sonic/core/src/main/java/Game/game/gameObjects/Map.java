@@ -1,10 +1,9 @@
 package Game.game.gameObjects;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -20,8 +19,6 @@ public class Map extends GameObject {
 	private static Map instance;
 	private static final float gravity = (float) 0.1;
 	private int mapSelected = 1;
-
-	// private float mapWidth, mapHeight;
 
 	public static Map getInstance(OrthographicCamera camera) {
 		if (instance == null) {
@@ -39,7 +36,7 @@ public class Map extends GameObject {
 		map3 = new TmxMapLoader().load("Mapa3.tmx");
 
 		mapRenderer = new OrthogonalTiledMapRenderer(map1, 1 / ppm);
-
+		
 	}
 
 	@Override
@@ -48,12 +45,12 @@ public class Map extends GameObject {
 
 		mapRenderer.setView(camera);
 		mapRenderer.render();
+		
+		
 	}
-
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		//update();
 	}
 
 	public void chengeMap(int mapId) {

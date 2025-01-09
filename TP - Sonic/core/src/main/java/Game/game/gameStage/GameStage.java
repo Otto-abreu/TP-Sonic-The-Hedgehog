@@ -28,13 +28,13 @@ public class GameStage extends Stage {
 		mapa = Map.getInstance(camera);
 
 		sonic = Sonic.getInstance((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
-
+		
+		this.addActor(new Background());
 		this.addActor(sonic);
 		this.addActor(mapa);
 		this.addActor(new CrabMeat());
 		this.addActor(new BuzzBomber());
 		this.addActor(new Eggman());
-
 		this.addActor(new JumpPad((float) 4479.9, 128, 1));
 
 	}
@@ -49,8 +49,13 @@ public class GameStage extends Stage {
 				Sonic aux = (Sonic) this.getActors().get(i);
 				camera.position.set(aux.getX() + 190, aux.getY() + 200, 0);
 				camera.update();
+
+			}if (getActors().get(i) instanceof Background) {
+				Background aux = (Background) getActors().get(i);
+				aux.move(sonic.getSpeedX(), sonic.getSpeedY(), sonic.getLives());
 			}
 		}
+		
 		ArrayList<JumpPad> closeJumpPads = getCloserJumpPad();
 		if (closeJumpPads != null) {
 			for(int i = 0; i < closeJumpPads.size(); i++) {

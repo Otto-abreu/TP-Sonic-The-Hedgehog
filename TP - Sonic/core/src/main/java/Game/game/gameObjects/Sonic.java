@@ -2,6 +2,7 @@ package Game.game.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -312,6 +313,12 @@ public class Sonic extends GameObject {
 	public void setInitialPosition() {
 		this.setX(initialPosition.x);
 		this.setY(initialPosition.y);
+		speed.x = 0;
+		speed.y = 0;
+	}
+	
+	public int getLives() {
+		return lives;
 	}
 
 }
