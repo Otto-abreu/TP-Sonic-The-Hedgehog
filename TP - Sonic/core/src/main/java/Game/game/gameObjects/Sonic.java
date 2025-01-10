@@ -79,13 +79,12 @@ public class Sonic extends GameObject {
 		super.act(delta);
 
 		update();
-<<<<<<< HEAD
 
 		// System.out.println(getX() + " - " + getY());
-=======
+
 		
 		System.out.println(getX() + " - " + getY());
->>>>>>> 5f5508eab4b003a038e2a619e7c6e9f1a0a0421b
+
 
 	}
 
