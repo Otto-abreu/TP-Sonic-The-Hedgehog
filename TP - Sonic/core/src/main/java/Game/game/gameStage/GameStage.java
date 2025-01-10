@@ -23,39 +23,39 @@ public class GameStage extends Stage {
 	public GameStage(GameScreen screen) {
 		super(new ScreenViewport());
 		Gdx.input.setInputProcessor(this);
-		
+
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.wav"));
 		music.setLooping(true);
-		
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		mapa = Map.getInstance(camera);
 
 		sonic = Sonic.getInstance((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
-		
+
 		coins = new ArrayList<Coin>();
-		
+
 		this.addActor(new Background());
 		this.addActor(sonic);
 		this.addActor(mapa);
 		this.addActor(new CrabMeat());
 		this.addActor(new BuzzBomber());
 		this.addActor(new Eggman());
-		
+
 		addJumpPads(mapa.getMapSelected());
 		addCoins(mapa.getMapSelected());
 	}
 
 	@Override
 	public void act(float delta) {
-		
+
 		super.act(delta);
-		
-		if(!music.isPlaying()) {
-			//music.play();
+
+		if (!music.isPlaying()) {
+			// music.play();
 		}
-		
+
 		for (int i = 0; i < this.getActors().size; i++) {
 
 			this.getActors().get(i).act(delta);
@@ -64,24 +64,27 @@ public class GameStage extends Stage {
 				camera.position.set(aux.getX() + 190, aux.getY() + 200, 0);
 				camera.update();
 
-			}if (getActors().get(i) instanceof Background) {
+			}
+			if (getActors().get(i) instanceof Background) {
 				Background aux = (Background) getActors().get(i);
 				aux.move(sonic.getSpeedX(), sonic.getSpeedY(), sonic.getLives());
 			}
 		}
-		
+
 		ArrayList<JumpPad> closeJumpPads = getCloserJumpPad();
 		if (closeJumpPads != null) {
-			for(int i = 0; i < closeJumpPads.size(); i++) {
+			for (int i = 0; i < closeJumpPads.size(); i++) {
 				sonic.checkJumpPadTouch(closeJumpPads.get(i));
 			}
 		}
 
 		handleLevelChange();
+
+		checkSonicOverlapsCoin();
 	}
 
 	public ArrayList<JumpPad> getCloserJumpPad() {
-		
+
 		ArrayList<JumpPad> jumpPads = new ArrayList<JumpPad>();
 		JumpPad aux = null;
 
@@ -108,7 +111,7 @@ public class GameStage extends Stage {
 			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
 			sonic.setInitialPosition();
 			addCoins(mapa.getMapSelected());
-	
+
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.M) && mapa.getMapSelected() == 2) {
 			mapa.chengeMap(3);
 			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
@@ -116,41 +119,107 @@ public class GameStage extends Stage {
 			addJumpPads(mapa.getMapSelected());
 		}
 	}
-	
+
 	public void removeJumpPads(int mapId) {
-		for(int i = this.getActors().size - 1; i >= 0; i--) {
-			if(getActors().get(i) instanceof JumpPad) {
+		for (int i = this.getActors().size - 1; i >= 0; i--) {
+			if (getActors().get(i) instanceof JumpPad) {
 				JumpPad aux = (JumpPad) getActors().get(i);
-				if(aux.getBelongingMap() == mapId) {
+				if (aux.getBelongingMap() == mapId) {
 					this.getActors().removeIndex(i);
 				}
 			}
 		}
 	}
-	
+
+	public void checkSonicOverlapsCoin() {
+
+		for (int i = 0; i < this.getActors().size; i++) {
+			if (this.getActors().get(i) instanceof Coin) {
+				Coin aux = (Coin) this.getActors().get(i);
+				if ((sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
+						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50)) {
+					collectCoin(aux.getId());
+				}
+			}
+		}
+	}
+
+	public void collectCoin(int coinId) {
+
+		for (int i = this.getActors().size - 1; i >= 0; i--) {
+			if (this.getActors().get(i) instanceof Coin) {
+
+				Coin aux = (Coin) this.getActors().get(i);
+
+				if (aux.getId() == coinId) {
+					this.getActors().removeIndex(i);
+					sonic.setCoinsCollected(sonic.getCoinsCollected() + 1);
+					System.out.println(sonic.getCoinsCollected());
+				}
+			}
+		}
+		;
+	}
+
 	public void addCoins(int mapId) {
 		switch (mapId) {
 		case 1:
-			this.addActor(new Coin( 1279, 1152, mapId));
-			this.addActor(new Coin( 2496, 1216, mapId));
-			this.addActor(new Coin( 2176, 641, mapId));
-			this.addActor(new Coin( 3778, 128, mapId));
-			this.addActor(new Coin( 6720, 577, mapId));
-			this.addActor(new Coin( 5184, 577, mapId));
-			this.addActor(new Coin( 10814, 577, mapId));
-			this.addActor(new Coin( 10878, 577, mapId));
-			this.addActor(new Coin( 12477, 513, mapId));
-			this.addActor(new Coin( 15105, 1024, mapId));
-			this.addActor(new Coin( 19073, 641, mapId));
-			this.addActor(new Coin( 19970, 64, mapId));
-			this.addActor(new Coin( 20992, 448, mapId));
+			this.addActor(new Coin(1279, 1152, mapId));
+			this.addActor(new Coin(2496, 1216, mapId));
+			this.addActor(new Coin(2176, 641, mapId));
+			this.addActor(new Coin(3778, 128, mapId));
+			this.addActor(new Coin(6720, 577, mapId));
+			this.addActor(new Coin(5184, 577, mapId));
+			this.addActor(new Coin(10814, 577, mapId));
+			this.addActor(new Coin(10878, 577, mapId));
+			this.addActor(new Coin(12477, 513, mapId));
+			this.addActor(new Coin(15105, 1024, mapId));
+			this.addActor(new Coin(19073, 641, mapId));
+			this.addActor(new Coin(19970, 64, mapId));
+			this.addActor(new Coin(20992, 448, mapId));
 
 			break;
 		case 2:
-			this.addActor(new Coin((float) 1151, 1088, mapId));
-			this.addActor(new Coin((float) 2241, 128, mapId));
-			this.addActor(new Coin((float) 3200, 448, mapId));
-			this.addActor(new Coin((float) 4288, 576, mapId));
+			this.addActor(new Coin(1151, 1088, mapId));
+			this.addActor(new Coin(2241, 128, mapId));
+			this.addActor(new Coin(3200, 448, mapId));
+			this.addActor(new Coin(4288, 576, mapId));
+			this.addActor(new Coin(6527, 128, mapId));
+			this.addActor(new Coin(10176, 704, mapId));
+			this.addActor(new Coin(10818, 64, mapId));
+			this.addActor(new Coin(11585, 832, mapId));
+			this.addActor(new Coin(13120, 896, mapId));
+			this.addActor(new Coin(14784, 768, mapId));
+			this.addActor(new Coin(14848, 64, mapId));
+			this.addActor(new Coin(13825, 256, mapId));
+			this.addActor(new Coin(11071, 448, mapId));
+			this.addActor(new Coin(13819, 576, mapId));
+			this.addActor(new Coin(12673, 384, mapId));
+			this.addActor(new Coin(12737, 384, mapId));
+			this.addActor(new Coin(11839, 192, mapId));
+			this.addActor(new Coin(12031, 384, mapId));
+			this.addActor(new Coin(16836, 832 + 128, mapId));
+			this.addActor(new Coin(20161, 448, mapId));
+			this.addActor(new Coin(24063, 832, mapId));
+			this.addActor(new Coin(24127, 832, mapId));
+			this.addActor(new Coin(24191, 832, mapId));
+			this.addActor(new Coin(26047, 1024, mapId));
+			this.addActor(new Coin(24001, 1216, mapId));
+			this.addActor(new Coin(26688, 192 + 64, mapId));
+			this.addActor(new Coin(28031, 384, mapId));
+			this.addActor(new Coin(28800, 448, mapId));
+			this.addActor(new Coin(33154, 64 + 128, mapId));
+			this.addActor(new Coin(33471, 64 + 128, mapId));
+			this.addActor(new Coin(33474, 384, mapId));
+			this.addActor(new Coin(33023, 384, mapId));
+			this.addActor(new Coin(34623, 192, mapId));
+			this.addActor(new Coin(34432, 192, mapId));
+			this.addActor(new Coin(34240, 576, mapId));
+			this.addActor(new Coin(34240 - 128, 576, mapId));
+			this.addActor(new Coin(33602, 576, mapId));
+			this.addActor(new Coin(33602 + 128, 576, mapId));
+			this.addActor(new Coin(33086, 576, mapId));
+			this.addActor(new Coin(33086 + 128, 576, mapId));
 			break;
 		case 3:
 
@@ -159,21 +228,22 @@ public class GameStage extends Stage {
 			break;
 		}
 	}
-	
+
 	public void removeRemainingCoins(int mapId) {
-		
-		for(int i = this.getActors().size - 1; i >= 0; i--) {
-			
-			if(this.getActors().get(i) instanceof Coin) {
+
+		for (int i = this.getActors().size - 1; i >= 0; i--) {
+
+			if (this.getActors().get(i) instanceof Coin) {
 				Coin aux = (Coin) this.getActors().get(i);
-				
-				if(aux.getBelongingMap() == mapId) {
+
+				if (aux.getBelongingMap() == mapId) {
 					this.getActors().removeIndex(i);
+					sonic.setCoinsCollected(0);
 				}
 			}
 		}
 	}
-	
+
 	public void addJumpPads(int mapId) {
 		switch (mapId) {
 		case 1:
@@ -190,7 +260,6 @@ public class GameStage extends Stage {
 			break;
 		}
 	}
-	
 
 	@Override
 	public void draw() {

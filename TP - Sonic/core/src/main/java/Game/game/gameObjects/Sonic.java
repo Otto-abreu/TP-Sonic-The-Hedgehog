@@ -12,7 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import Game.game.commander.InputHandler;
 
 public class Sonic extends GameObject {
-
+	
+	private int coinsCollected = 0;
 	private Vector2 speed;
 	private int lives = 10;
 	private Vector2 oldPosition;
@@ -319,6 +320,14 @@ public class Sonic extends GameObject {
 	
 	public int getLives() {
 		return lives;
+	}
+
+	public int getCoinsCollected() {
+		return coinsCollected;
+	}
+
+	public void setCoinsCollected(int coinsCollected) {
+		this.coinsCollected = coinsCollected;
 	}
 
 }

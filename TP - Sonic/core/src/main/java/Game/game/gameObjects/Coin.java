@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Coin extends GameObject{
 	
+	private static int quantity = 0;
+	private int id;
+	
 	private int belongingMap;
 	
 	public Coin(float posX, float posY, int map) {
@@ -19,6 +22,8 @@ public class Coin extends GameObject{
 		belongingMap = map;
 		
 		this.bounds = image.getBoundingRectangle();
+		quantity++;
+		id = quantity;
 	}
 	
 	@Override
@@ -37,6 +42,10 @@ public class Coin extends GameObject{
 	
 	public int getBelongingMap() {
 		return belongingMap;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 }
