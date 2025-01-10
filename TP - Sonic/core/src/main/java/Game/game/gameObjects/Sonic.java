@@ -1,25 +1,26 @@
 package Game.game.gameObjects;
 
+import Game.game.gameAssets.SonicAnimationManager;
 import com.badlogic.gdx.Gdx;
-
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import Game.game.commander.InputHandler;
 
 public class Sonic extends GameObject {
-	
+
 	private int coinsCollected = 0;
 	private Vector2 speed;
 	private int lives = 10;
 	private Vector2 oldPosition;
 	private final float finalSpeedX = 5;
 	private final float finalSpeedY = 5;
-	private final int jumpPadLaunchSpeed = 12;
+	private final int jumpPadLaunchSpeed = 10;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
 	private boolean jumpEnabled = false;
@@ -31,6 +32,8 @@ public class Sonic extends GameObject {
 
 	private TiledMapTileLayer collisionLayer;
 
+	private SonicAnimationManager animationManager;
+
 	public static Sonic getInstance(TiledMapTileLayer collisionLayer) {
 		if (instance == null) {
 			instance = new Sonic(collisionLayer);
@@ -39,8 +42,10 @@ public class Sonic extends GameObject {
 	}
 
 	private Sonic(TiledMapTileLayer collisionLayer) {
-		image = new Sprite(new Texture(Gdx.files.internal("sonic.png")));
+		image = new Sprite(new
+		Texture(Gdx.files.internal("sonicBasicMotion/sonicBasicMotion1.png")));
 
+		animationManager = new SonicAnimationManager();
 		setPosition(100, 1000);
 		initialPosition = new Vector2(getX(), getY());
 
@@ -52,40 +57,59 @@ public class Sonic extends GameObject {
 		this.collisionLayer = collisionLayer;
 
 		this.bounds = image.getBoundingRectangle();
-
+		
+		//this.bounds = new Rectangle(getX(), getY(), 64, 64); corrigir, da conflito com a mola
+		
 		setWidth(64);
 		setHeight(64);
-		
+
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
+		// batch.draw(image, this.getX(), this.getY(), image.getWidth(),
+		// image.getHeight());
+		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
+		batch.draw(currentFrame, this.getX(), this.getY(), getWidth(), getHeight());
 	}
 
 	@Override
 	public void act(float delta) {
-		
+
 		super.act(delta);
-		
+
 		update();
+<<<<<<< HEAD
+
+		// System.out.println(getX() + " - " + getY());
+=======
 		
-		//System.out.println(getX() + " - " + getY());
+		System.out.println(getX() + " - " + getY());
+>>>>>>> 5f5508eab4b003a038e2a619e7c6e9f1a0a0421b
 
 	}
-	
+
 	private void update() {
-		
+
 		inputHandler.handleYAxisInput(this);
+
+		if (getSpeedY() != 0) {
+			animationManager.setAction("jump");
+		} else if (Math.abs(getSpeedX()) > 0) {
+			animationManager.setAction("walk");
+		} else {
+			animationManager.setAction("idle");
+		}
+
 		if (inputHandler.handleXAxisInput(this) == false) {
 			decelerate();
 		}
-		
+
 		if (jumpPadTouched == true) {
 			speed.y = jumpPadLaunchSpeed;
 			jumpPadTouched = false;
 		}
-		
+
 		applyGravity();
 
 		oldPosition.x = getX();
@@ -97,10 +121,29 @@ public class Sonic extends GameObject {
 		handleCollision(oldPosition.x, oldPosition.y);
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
-
+		
 		if (getY() < -10) {
 			reSpawn();
 		}
+		/*
+		 * inputHandler.handleYAxisInput(this); 
+		 * if (inputHandler.handleXAxisInput(this) == false) { decelerate(); }
+		 * 
+		 * if (jumpPadTouched == true) { speed.y = jumpPadLaunchSpeed; jumpPadTouched =
+		 * false; }
+		 * 
+		 * applyGravity();
+		 * 
+		 * oldPosition.x = getX(); setX(getX() + speed.x);
+		 * 
+		 * oldPosition.y = getY(); setY(getY() + speed.y);
+		 * 
+		 * handleCollision(oldPosition.x, oldPosition.y);
+		 * 
+		 * elapsedTime += Gdx.graphics.getDeltaTime();
+		 * 
+		 * if (getY() < -10) { reSpawn(); }
+		 */
 	}
 
 	public boolean checkJumpPadTouch(JumpPad jumpPad) {
@@ -108,6 +151,7 @@ public class Sonic extends GameObject {
 
 		if (this.bounds.overlaps(jumpPad.getBounds())) {
 			jumpPadTouched = true;
+			// jumpPad.activate();
 			returnValue = true;
 		}
 
@@ -140,12 +184,13 @@ public class Sonic extends GameObject {
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
 	}
+
 	public void checkCollisionOnX(float oldX) {
 
 		boolean collisionX = false;
 
 		if (speed.x > 0) {
-			// collision: blocks on the right
+
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 			Vector2 rightMiddleBlockPos, rightTopBlockPos, rightBottomBlockPos;
 			rightTopBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
@@ -167,7 +212,7 @@ public class Sonic extends GameObject {
 		}
 
 		else if (speed.x < 0) {
-			// collision: blocks on the left
+
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 			Vector2 leftMiddleBlockPos, leftTopBlockPos, leftBottomBlockPos;
 
@@ -311,13 +356,14 @@ public class Sonic extends GameObject {
 	public void setJumpEnabled(boolean jumpEnabled) {
 		this.jumpEnabled = jumpEnabled;
 	}
+
 	public void setInitialPosition() {
 		this.setX(initialPosition.x);
 		this.setY(initialPosition.y);
 		speed.x = 0;
 		speed.y = 0;
 	}
-	
+
 	public int getLives() {
 		return lives;
 	}

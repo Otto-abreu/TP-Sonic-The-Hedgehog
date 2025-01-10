@@ -38,14 +38,18 @@ public class Background extends GameObject {
 			int oldSonicLives = this.sonicLives;
 			this.sonicLives = sonicLives;
 			if(oldSonicLives != this.sonicLives) {
-				image.setX(initialPosition.x);
-				image.setY(initialPosition.y);
+				initialPos();
 
 			}
 		}
 		image.setY(image.getY() - sonicSpeedY/4);
 		image.setX(image.getX() - sonicSpeedX/4);
 
+	}
+	
+	public void initialPos() {
+		image.setX(initialPosition.x);
+		image.setY(initialPosition.y);
 	}
 
 }

@@ -1,8 +1,10 @@
 Mapa.tmx
 Mapa2.tmx
+Mapa3.tmx
 TileSet.png
 TileSet2-removebg-preview.tsx
 TileSet2.png
+TileSet3.png
 sonic.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
