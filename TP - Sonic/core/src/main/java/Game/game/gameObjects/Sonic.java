@@ -19,7 +19,7 @@ public class Sonic extends GameObject {
 	private Vector2 oldPosition;
 	private final float finalSpeedX = 5;
 	private final float finalSpeedY = 5;
-	private final int jumpPadLaunchSpeed = 12;
+	private final int jumpPadLaunchSpeed = 10;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
 	private boolean jumpEnabled = false;
@@ -70,7 +70,7 @@ public class Sonic extends GameObject {
 		
 		update();
 		
-		//System.out.println(getX() + " - " + getY());
+		System.out.println(getX() + " - " + getY());
 
 	}
 	
@@ -145,7 +145,7 @@ public class Sonic extends GameObject {
 		boolean collisionX = false;
 
 		if (speed.x > 0) {
-			// collision: blocks on the right
+
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 			Vector2 rightMiddleBlockPos, rightTopBlockPos, rightBottomBlockPos;
 			rightTopBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
@@ -167,7 +167,7 @@ public class Sonic extends GameObject {
 		}
 
 		else if (speed.x < 0) {
-			// collision: blocks on the left
+
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 			Vector2 leftMiddleBlockPos, leftTopBlockPos, leftBottomBlockPos;
 
