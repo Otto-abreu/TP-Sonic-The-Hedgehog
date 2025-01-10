@@ -18,6 +18,7 @@ public class GameStage extends Stage {
 	private Map mapa;
 	private Sonic sonic;
 	private Music music;
+	private ArrayList<Coin> coins;
 
 	public GameStage(GameScreen screen) {
 		super(new ScreenViewport());
@@ -28,11 +29,12 @@ public class GameStage extends Stage {
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		// camera.zoom = (float) 10;
 
 		mapa = Map.getInstance(camera);
 
 		sonic = Sonic.getInstance((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
+		
+		coins = new ArrayList<Coin>();
 		
 		this.addActor(new Background());
 		this.addActor(sonic);
@@ -40,8 +42,9 @@ public class GameStage extends Stage {
 		this.addActor(new CrabMeat());
 		this.addActor(new BuzzBomber());
 		this.addActor(new Eggman());
-		this.addActor(new JumpPad((float) 4479.9, 128, 1));
-
+		
+		addJumpPads(mapa.getMapSelected());
+		addCoins(mapa.getMapSelected());
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class GameStage extends Stage {
 		super.act(delta);
 		
 		if(!music.isPlaying()) {
-			music.play();
+			//music.play();
 		}
 		
 		for (int i = 0; i < this.getActors().size; i++) {
@@ -80,14 +83,10 @@ public class GameStage extends Stage {
 	public ArrayList<JumpPad> getCloserJumpPad() {
 		
 		ArrayList<JumpPad> jumpPads = new ArrayList<JumpPad>();
-		int counter = 0;
 		JumpPad aux = null;
-
 
 		for (int i = 0; i < this.getActors().size; i++) {
 			if (this.getActors().get(i) instanceof JumpPad) {
-				counter++;
-				System.out.println(counter);
 				aux = (JumpPad) this.getActors().get(i);
 				if ((sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
 						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50) == false) {
@@ -103,23 +102,95 @@ public class GameStage extends Stage {
 
 	public void handleLevelChange() {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.M) && mapa.getMapSelected() == 1) {
+			removeJumpPads(mapa.getMapSelected());
+			removeRemainingCoins(mapa.getMapSelected());
 			mapa.chengeMap(2);
 			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
 			sonic.setInitialPosition();
-			for (int i = 0; i < getActors().size; i++) {
-				if (this.getActors().get(i) instanceof JumpPad) {
-					this.getActors().removeIndex(i);
-				}
-			}
+			addCoins(mapa.getMapSelected());
+	
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.M) && mapa.getMapSelected() == 2) {
 			mapa.chengeMap(3);
 			sonic.setCollisionLayer((TiledMapTileLayer) mapa.getMap().getLayers().get("1"));
 			sonic.setInitialPosition();
-			this.addActor(new JumpPad((float) 16959.89, 128, 3));
-			this.addActor(new JumpPad((float) 18431, 128, 3));
-			this.addActor(new JumpPad((float) 18111, 576, 3));
+			addJumpPads(mapa.getMapSelected());
 		}
 	}
+	
+	public void removeJumpPads(int mapId) {
+		for(int i = this.getActors().size - 1; i >= 0; i--) {
+			if(getActors().get(i) instanceof JumpPad) {
+				JumpPad aux = (JumpPad) getActors().get(i);
+				if(aux.getBelongingMap() == mapId) {
+					this.getActors().removeIndex(i);
+				}
+			}
+		}
+	}
+	
+	public void addCoins(int mapId) {
+		switch (mapId) {
+		case 1:
+			this.addActor(new Coin( 1279, 1152, mapId));
+			this.addActor(new Coin( 2496, 1216, mapId));
+			this.addActor(new Coin( 2176, 641, mapId));
+			this.addActor(new Coin( 3778, 128, mapId));
+			this.addActor(new Coin( 6720, 577, mapId));
+			this.addActor(new Coin( 5184, 577, mapId));
+			this.addActor(new Coin( 10814, 577, mapId));
+			this.addActor(new Coin( 10878, 577, mapId));
+			this.addActor(new Coin( 12477, 513, mapId));
+			this.addActor(new Coin( 15105, 1024, mapId));
+			this.addActor(new Coin( 19073, 641, mapId));
+			this.addActor(new Coin( 19970, 64, mapId));
+			this.addActor(new Coin( 20992, 448, mapId));
+
+			break;
+		case 2:
+			this.addActor(new Coin((float) 1151, 1088, mapId));
+			this.addActor(new Coin((float) 2241, 128, mapId));
+			this.addActor(new Coin((float) 3200, 448, mapId));
+			this.addActor(new Coin((float) 4288, 576, mapId));
+			break;
+		case 3:
+
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void removeRemainingCoins(int mapId) {
+		
+		for(int i = this.getActors().size - 1; i >= 0; i--) {
+			
+			if(this.getActors().get(i) instanceof Coin) {
+				Coin aux = (Coin) this.getActors().get(i);
+				
+				if(aux.getBelongingMap() == mapId) {
+					this.getActors().removeIndex(i);
+				}
+			}
+		}
+	}
+	
+	public void addJumpPads(int mapId) {
+		switch (mapId) {
+		case 1:
+			this.addActor(new JumpPad((float) 4479.9, 128, mapId));
+			break;
+		case 2:
+			break;
+		case 3:
+			this.addActor(new JumpPad((float) 16959.89, 128, mapId));
+			this.addActor(new JumpPad((float) 18431, 128, mapId));
+			this.addActor(new JumpPad((float) 18111, 576, mapId));
+			break;
+		default:
+			break;
+		}
+	}
+	
 
 	@Override
 	public void draw() {
