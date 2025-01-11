@@ -69,17 +69,15 @@ public class Sonic extends GameObject {
 		super.act(delta);
 		
 		update();
-<<<<<<< Updated upstream
+
 		
 		System.out.println(getX() + " - " + getY());
-=======
+
 
 		// System.out.println(getX() + " - " + getY());
 
 		
 		System.out.println(getX() + " - " + getY());
-
->>>>>>> Stashed changes
 
 	}
 	

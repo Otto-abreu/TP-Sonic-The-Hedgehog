@@ -22,14 +22,8 @@ public class GameStage extends Stage {
 
 	private Background background;
 
-
 	CoinAnimationManager coinAnimationManager = new CoinAnimationManager();
 	
-
-	private Background background;
-
-
-
 	public GameStage(GameScreen screen) {
 		super(new ScreenViewport());
 		Gdx.input.setInputProcessor(this);
@@ -180,62 +174,62 @@ public class GameStage extends Stage {
 	public void addCoins(int mapId) {
 		switch (mapId) {
 		case 1:
-			this.addActor(new Coin(1279, 1152, mapId));
-			this.addActor(new Coin(2496, 1216, mapId));
-			this.addActor(new Coin(2176, 641, mapId));
-			this.addActor(new Coin(3778, 128, mapId));
-			this.addActor(new Coin(6720, 577, mapId));
-			this.addActor(new Coin(5184, 577, mapId));
-			this.addActor(new Coin(10814, 577, mapId));
-			this.addActor(new Coin(10878, 577, mapId));
-			this.addActor(new Coin(12477, 513, mapId));
-			this.addActor(new Coin(15105, 1024, mapId));
-			this.addActor(new Coin(19073, 641, mapId));
-			this.addActor(new Coin(19970, 64, mapId));
-			this.addActor(new Coin(20992, 448, mapId));
+			this.addActor(new Coin(1279, 1152, mapId, coinAnimationManager));
+			this.addActor(new Coin(2496, 1216, mapId, coinAnimationManager));
+			this.addActor(new Coin(2176, 641, mapId, coinAnimationManager));
+			this.addActor(new Coin(3778, 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(6720, 577, mapId, coinAnimationManager));
+			this.addActor(new Coin(5184, 577, mapId, coinAnimationManager));
+			this.addActor(new Coin(10814, 577, mapId, coinAnimationManager));
+			this.addActor(new Coin(10878, 577, mapId, coinAnimationManager));
+			this.addActor(new Coin(12477, 513, mapId, coinAnimationManager));
+			this.addActor(new Coin(15105, 1024, mapId, coinAnimationManager));
+			this.addActor(new Coin(19073, 641, mapId, coinAnimationManager));
+			this.addActor(new Coin(19970, 64, mapId, coinAnimationManager));
+			this.addActor(new Coin(20992, 448, mapId, coinAnimationManager));
 
 			break;
 		case 2:
-			this.addActor(new Coin(1151, 1088, mapId));
-			this.addActor(new Coin(2241, 128, mapId));
-			this.addActor(new Coin(3200, 448, mapId));
-			this.addActor(new Coin(4288, 576, mapId));
-			this.addActor(new Coin(6527, 128, mapId));
-			this.addActor(new Coin(10176, 704, mapId));
-			this.addActor(new Coin(10818, 64, mapId));
-			this.addActor(new Coin(11585, 832, mapId));
-			this.addActor(new Coin(13120, 896, mapId));
-			this.addActor(new Coin(14784, 768, mapId));
-			this.addActor(new Coin(14848, 64, mapId));
-			this.addActor(new Coin(13825, 256, mapId));
-			this.addActor(new Coin(11071, 448, mapId));
-			this.addActor(new Coin(13819, 576, mapId));
-			this.addActor(new Coin(12673, 384, mapId));
-			this.addActor(new Coin(12737, 384, mapId));
-			this.addActor(new Coin(11839, 192, mapId));
-			this.addActor(new Coin(12031, 384, mapId));
-			this.addActor(new Coin(16836, 832 + 128, mapId));
-			this.addActor(new Coin(20161, 448, mapId));
-			this.addActor(new Coin(24063, 832, mapId));
-			this.addActor(new Coin(24127, 832, mapId));
-			this.addActor(new Coin(24191, 832, mapId));
-			this.addActor(new Coin(26047, 1024, mapId));
-			this.addActor(new Coin(24001, 1216, mapId));
-			this.addActor(new Coin(26688, 192 + 64, mapId));
-			this.addActor(new Coin(28031, 384, mapId));
-			this.addActor(new Coin(28800, 448, mapId));
-			this.addActor(new Coin(33154, 64 + 128, mapId));
-			this.addActor(new Coin(33471, 64 + 128, mapId));
-			this.addActor(new Coin(33474, 384, mapId));
-			this.addActor(new Coin(33023, 384, mapId));
-			this.addActor(new Coin(34623, 192, mapId));
-			this.addActor(new Coin(34432, 192, mapId));
-			this.addActor(new Coin(34240, 576, mapId));
-			this.addActor(new Coin(34240 - 128, 576, mapId));
-			this.addActor(new Coin(33602, 576, mapId));
-			this.addActor(new Coin(33602 + 128, 576, mapId));
-			this.addActor(new Coin(33086, 576, mapId));
-			this.addActor(new Coin(33086 + 128, 576, mapId));
+			this.addActor(new Coin(1151, 1088, mapId, coinAnimationManager));
+			this.addActor(new Coin(2241, 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(3200, 448, mapId, coinAnimationManager));
+			this.addActor(new Coin(4288, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(6527, 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(10176, 704, mapId, coinAnimationManager));
+			this.addActor(new Coin(10818, 64, mapId, coinAnimationManager));
+			this.addActor(new Coin(11585, 832, mapId, coinAnimationManager));
+			this.addActor(new Coin(13120, 896, mapId, coinAnimationManager));
+			this.addActor(new Coin(14784, 768, mapId, coinAnimationManager));
+			this.addActor(new Coin(14848, 64, mapId, coinAnimationManager));
+			this.addActor(new Coin(13825, 256, mapId, coinAnimationManager));
+			this.addActor(new Coin(11071, 448, mapId, coinAnimationManager));
+			this.addActor(new Coin(13819, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(12673, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(12737, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(11839, 192, mapId, coinAnimationManager));
+			this.addActor(new Coin(12031, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(16836, 832 + 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(20161, 448, mapId, coinAnimationManager));
+			this.addActor(new Coin(24063, 832, mapId, coinAnimationManager));
+			this.addActor(new Coin(24127, 832, mapId, coinAnimationManager));
+			this.addActor(new Coin(24191, 832, mapId, coinAnimationManager));
+			this.addActor(new Coin(26047, 1024, mapId, coinAnimationManager));
+			this.addActor(new Coin(24001, 1216, mapId, coinAnimationManager));
+			this.addActor(new Coin(26688, 192 + 64, mapId, coinAnimationManager));
+			this.addActor(new Coin(28031, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(28800, 448, mapId, coinAnimationManager));
+			this.addActor(new Coin(33154, 64 + 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(33471, 64 + 128, mapId, coinAnimationManager));
+			this.addActor(new Coin(33474, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(33023, 384, mapId, coinAnimationManager));
+			this.addActor(new Coin(34623, 192, mapId, coinAnimationManager));
+			this.addActor(new Coin(34432, 192, mapId, coinAnimationManager));
+			this.addActor(new Coin(34240, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(34240 - 128, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(33602, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(33602 + 128, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(33086, 576, mapId, coinAnimationManager));
+			this.addActor(new Coin(33086 + 128, 576, mapId, coinAnimationManager));
 			break;
 		case 3:
 			this.addActor(new Coin(960, 576, mapId, coinAnimationManager));
