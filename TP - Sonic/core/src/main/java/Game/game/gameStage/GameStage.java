@@ -1,5 +1,6 @@
 package Game.game.gameStage;
 
+import Game.game.gameAssets.JumpPadsAnimationManager;
 import Game.game.gameAssets.CoinAnimationManager;
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class GameStage extends Stage {
 	private ArrayList<Coin> coins;
 
 	CoinAnimationManager coinAnimationManager = new CoinAnimationManager();
-	
+	JumpPadsAnimationManager jumpPadsAnimationManager = new JumpPadsAnimationManager();
 
 	private Background background;
 
@@ -315,14 +316,14 @@ public class GameStage extends Stage {
 	public void addJumpPads(int mapId) {
 		switch (mapId) {
 		case 1:
-			this.addActor(new JumpPad((float) 4479.9, 128, mapId));
+			this.addActor(new JumpPad((float) 4479.9, 128, mapId, jumpPadsAnimationManager));
 			break;
 		case 2:
 			break;
 		case 3:
-			this.addActor(new JumpPad((float) 16959.89, 128, mapId));
-			this.addActor(new JumpPad((float) 18431, 128, mapId));
-			this.addActor(new JumpPad((float) 18111, 576, mapId));
+			this.addActor(new JumpPad((float) 16959.89, 128, mapId, jumpPadsAnimationManager));
+			this.addActor(new JumpPad((float) 18431, 128, mapId, jumpPadsAnimationManager));
+			this.addActor(new JumpPad((float) 18111, 576, mapId, jumpPadsAnimationManager));
 			break;
 		default:
 			break;

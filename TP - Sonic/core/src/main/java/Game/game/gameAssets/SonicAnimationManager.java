@@ -7,7 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.Gdx;
 
 public class SonicAnimationManager extends TextureManager {
-	private Animation<TextureRegion> basicMotionAnimation;
+	private Animation<TextureRegion> basicMotionRight;
+	private Animation<TextureRegion> basicMotionLeft;
 	private Animation<TextureRegion> jumpingAnimation;
 	private float stateTime;
 	private String currentAction;
@@ -15,14 +16,14 @@ public class SonicAnimationManager extends TextureManager {
 	public SonicAnimationManager() {
 		loadTextures();
 		stateTime = 0f;
-		currentAction = "walk"; 
+		currentAction = "idle"; 
 	}
 
 	@Override
 	public void loadTextures() {
-		
-		basicMotionAnimation = loadAnimation("sonicBasicMotion/sonicBasicMotion", 6, 0.2f);
-		jumpingAnimation = loadAnimation("sonicJumping/sonicJumping", 5, 0.15f);
+		basicMotionRight = loadAnimation("sonicBasicMotion/sonicBasicMotion", 6, 0.2f);
+		basicMotionLeft = loadAnimation("sonicBasicMotion/sonicBasicMotionLeft", 6, 0.2f);
+		jumpingAnimation = loadAnimation("sonicJumping/sonicJumping", 7, 0.02f);
 
 	}
 
@@ -38,23 +39,27 @@ public class SonicAnimationManager extends TextureManager {
 	}
 
 	public void setAction(String action) {
-		this.currentAction = action; 
-		stateTime = 0f; 
+	    if (!this.currentAction.equals(action)) {
+	        this.currentAction = action; 
+	        stateTime = 0f; 
+	    }
 	}
-
+	
 	public TextureRegion getCurrentFrame(float deltaTime) {
-		stateTime += deltaTime;
+	    stateTime += deltaTime; 
 
-		switch (currentAction) {
-		case "idle":
-			return basicMotionAnimation.getKeyFrame(0); //o primeiro asset, sonic parado
-		case "walk":
-			return basicMotionAnimation.getKeyFrame(stateTime, true); 
-		case "jump":
-			return jumpingAnimation.getKeyFrame(stateTime, false);
-		default:
-			return basicMotionAnimation.getKeyFrame(0); //o primeiro asset, sonic parado
-		}
+	    switch (currentAction) {
+	        case "idle":
+	            return basicMotionRight.getKeyFrame(0, false);
+	        case "walkRight":
+	            return basicMotionRight.getKeyFrame(stateTime, true);
+	        case "walkLeft":
+	            return basicMotionLeft.getKeyFrame(stateTime, false);
+	        case "jump":
+	            return jumpingAnimation.getKeyFrame(stateTime, false);
+	        default:
+	            return basicMotionRight.getKeyFrame(0, false);
+	    }
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import Game.game.commander.InputHandler;
 
@@ -42,8 +41,7 @@ public class Sonic extends GameObject {
 	}
 
 	private Sonic(TiledMapTileLayer collisionLayer) {
-		image = new Sprite(new
-		Texture(Gdx.files.internal("sonicBasicMotion/sonicBasicMotion1.png")));
+		image = new Sprite(new Texture(Gdx.files.internal("sonicBasicMotion/sonicBasicMotion1.png")));
 
 		animationManager = new SonicAnimationManager();
 		setPosition(100, 1000);
@@ -57,9 +55,7 @@ public class Sonic extends GameObject {
 		this.collisionLayer = collisionLayer;
 
 		this.bounds = image.getBoundingRectangle();
-		
-		//this.bounds = new Rectangle(getX(), getY(), 64, 64); corrigir, da conflito com a mola
-		
+
 		setWidth(64);
 		setHeight(64);
 
@@ -82,25 +78,24 @@ public class Sonic extends GameObject {
 
 		// System.out.println(getX() + " - " + getY());
 
-		
 		System.out.println(getX() + " - " + getY());
-
 
 	}
 
 	private void update() {
-
 		inputHandler.handleYAxisInput(this);
 
 		if (getSpeedY() != 0) {
 			animationManager.setAction("jump");
-		} else if (Math.abs(getSpeedX()) > 0) {
-			animationManager.setAction("walk");
+		} else if (getSpeedX() > 0) {
+			animationManager.setAction("walkRight");
+		} else if (getSpeedX() < 0){
+			animationManager.setAction("walkLeft");
 		} else {
 			animationManager.setAction("idle");
 		}
 
-		if (inputHandler.handleXAxisInput(this) == false) {
+		if (!inputHandler.handleXAxisInput(this) == false) {
 			decelerate();
 		}
 
@@ -118,31 +113,12 @@ public class Sonic extends GameObject {
 		setY(getY() + speed.y);
 
 		handleCollision(oldPosition.x, oldPosition.y);
-
-		elapsedTime += Gdx.graphics.getDeltaTime();
 		
+		elapsedTime += Gdx.graphics.getDeltaTime();
+
 		if (getY() < -10) {
 			reSpawn();
 		}
-		/*
-		 * inputHandler.handleYAxisInput(this); 
-		 * if (inputHandler.handleXAxisInput(this) == false) { decelerate(); }
-		 * 
-		 * if (jumpPadTouched == true) { speed.y = jumpPadLaunchSpeed; jumpPadTouched =
-		 * false; }
-		 * 
-		 * applyGravity();
-		 * 
-		 * oldPosition.x = getX(); setX(getX() + speed.x);
-		 * 
-		 * oldPosition.y = getY(); setY(getY() + speed.y);
-		 * 
-		 * handleCollision(oldPosition.x, oldPosition.y);
-		 * 
-		 * elapsedTime += Gdx.graphics.getDeltaTime();
-		 * 
-		 * if (getY() < -10) { reSpawn(); }
-		 */
 	}
 
 	public boolean checkJumpPadTouch(JumpPad jumpPad) {
