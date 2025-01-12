@@ -86,17 +86,21 @@ public class Sonic extends GameObject {
 	private void update() {
 		inputHandler.handleYAxisInput(this);
 
-		if (getSpeedY() != 0) {
+		if (speed.y != 0) {
+			System.out.println("pulou");
 			animationManager.setAction("jump");
-		} else if (getSpeedX() > 0) {
+		} else if (speed.x > 0) {
+			System.out.println("andando pra direita");
 			animationManager.setAction("walkRight");
-		} else if (getSpeedX() < 0) {
+		} else if (speed.x < 0) {
+			System.out.println("andando pra esquerda");
 			animationManager.setAction("walkLeft");
 		} else {
+			System.out.println("parado");
 			animationManager.setAction("idle");
 		}
 
-		if (!inputHandler.handleXAxisInput(this) == false) {
+		if (inputHandler.handleXAxisInput(this) == false) {
 			decelerate();
 		}
 
