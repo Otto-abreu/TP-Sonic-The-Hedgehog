@@ -105,6 +105,7 @@ public class GameStage extends Stage {
 						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50) == false) {
 					aux = null;
 				} else {
+					System.out.println("JumpPad adicionado");
 					jumpPads.add(aux);
 				}
 			}

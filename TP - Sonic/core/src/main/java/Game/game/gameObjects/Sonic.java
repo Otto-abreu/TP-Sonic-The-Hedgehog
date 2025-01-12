@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import Game.game.commander.InputHandler;
 
@@ -66,6 +67,8 @@ public class Sonic extends GameObject {
 		// batch.draw(image, this.getX(), this.getY(), image.getWidth(),
 		// image.getHeight());
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
+		this.bounds = new Rectangle(currentFrame.getRegionX(), currentFrame.getRegionY(), currentFrame.getRegionWidth(),
+				currentFrame.getRegionHeight());
 		batch.draw(currentFrame, this.getX(), this.getY(), getWidth(), getHeight());
 	}
 
@@ -75,8 +78,6 @@ public class Sonic extends GameObject {
 		super.act(delta);
 
 		update();
-
-		// System.out.println(getX() + " - " + getY());
 
 		System.out.println(getX() + " - " + getY());
 
@@ -89,7 +90,7 @@ public class Sonic extends GameObject {
 			animationManager.setAction("jump");
 		} else if (getSpeedX() > 0) {
 			animationManager.setAction("walkRight");
-		} else if (getSpeedX() < 0){
+		} else if (getSpeedX() < 0) {
 			animationManager.setAction("walkLeft");
 		} else {
 			animationManager.setAction("idle");
@@ -113,7 +114,7 @@ public class Sonic extends GameObject {
 		setY(getY() + speed.y);
 
 		handleCollision(oldPosition.x, oldPosition.y);
-		
+
 		elapsedTime += Gdx.graphics.getDeltaTime();
 
 		if (getY() < -10) {

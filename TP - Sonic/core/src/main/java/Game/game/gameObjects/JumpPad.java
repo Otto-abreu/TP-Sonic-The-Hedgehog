@@ -31,7 +31,10 @@ public class JumpPad extends GameObject{
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		//batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
+		
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
+		this.bounds = new Rectangle(currentFrame.getRegionX(), currentFrame.getRegionY(), currentFrame.getRegionWidth(),
+				currentFrame.getRegionHeight());
 		batch.draw(currentFrame, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 	
