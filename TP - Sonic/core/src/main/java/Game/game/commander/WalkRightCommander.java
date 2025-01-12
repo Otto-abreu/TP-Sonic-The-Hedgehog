@@ -1,4 +1,5 @@
 package Game.game.commander;
+
 import Game.game.gameObjects.Sonic;
 
 public class WalkRightCommander extends Commander {
@@ -18,5 +19,4 @@ public class WalkRightCommander extends Commander {
 		}
 
 	}
-
 }

@@ -16,7 +16,6 @@ public class Sonic extends GameObject {
 
 	private int coinsCollected = 0;
 	private Vector2 speed;
-	private int lives = 10;
 	private Vector2 oldPosition;
 	private final float finalSpeedX = 5;
 	private final float finalSpeedY = 5;
@@ -27,6 +26,7 @@ public class Sonic extends GameObject {
 	private boolean jumpPadTouched = false;
 	private static Sonic instance;
 	private Vector2 initialPosition;
+	private boolean isDead = false;
 
 	private InputHandler inputHandler;
 
@@ -43,7 +43,6 @@ public class Sonic extends GameObject {
 
 	private Sonic(TiledMapTileLayer collisionLayer) {
 		image = new Sprite(new Texture(Gdx.files.internal("sonicBasicMotion/sonicBasicMotion1.png")));
-
 		animationManager = new SonicAnimationManager();
 		setPosition(100, 1000);
 		initialPosition = new Vector2(getX(), getY());
@@ -79,24 +78,20 @@ public class Sonic extends GameObject {
 
 		update();
 
-		System.out.println(getX() + " - " + getY());
+		//System.out.println(getX() + " - " + getY());
 
 	}
 
 	private void update() {
+		
 		inputHandler.handleYAxisInput(this);
-
 		if (speed.y != 0) {
-			System.out.println("pulou");
 			animationManager.setAction("jump");
 		} else if (speed.x > 0) {
-			System.out.println("andando pra direita");
 			animationManager.setAction("walkRight");
 		} else if (speed.x < 0) {
-			System.out.println("andando pra esquerda");
 			animationManager.setAction("walkLeft");
 		} else {
-			System.out.println("parado");
 			animationManager.setAction("idle");
 		}
 
@@ -120,8 +115,8 @@ public class Sonic extends GameObject {
 		handleCollision(oldPosition.x, oldPosition.y);
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
-
-		if (getY() < -10) {
+		
+		if(getY() <= -10) {
 			reSpawn();
 		}
 	}
@@ -286,7 +281,7 @@ public class Sonic extends GameObject {
 
 	private void reSpawn() {
 		setPosition(initialPosition.x, initialPosition.y);
-		lives--;
+		coinsCollected = 0;
 	}
 
 	public float getSpeedX() {
@@ -344,16 +339,16 @@ public class Sonic extends GameObject {
 		speed.y = 0;
 	}
 
-	public int getLives() {
-		return lives;
-	}
-
 	public int getCoinsCollected() {
 		return coinsCollected;
 	}
 
 	public void setCoinsCollected(int coinsCollected) {
 		this.coinsCollected = coinsCollected;
+	}
+	
+	public boolean isDead() {
+		return getY() <= 10 && coinsCollected == 0;
 	}
 
 }

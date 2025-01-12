@@ -1,9 +1,7 @@
 package Game.game.gameObjects;
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -13,6 +11,7 @@ public class Map extends GameObject {
 	private TiledMap map1;
 	private TiledMap map2;
 	private TiledMap map3;
+	private int[] mapSizes = {21697, 36930, 39050};
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private static final float ppm = 2;
 	private OrthographicCamera camera;
@@ -56,7 +55,10 @@ public class Map extends GameObject {
 	public void chengeMap(int mapId) {
 		TiledMap aux = new TiledMap();
 		
-		if(mapId == 2) {
+		if(mapId == 1) {
+			aux = map1;
+			mapSelected = 1;
+		}else if(mapId == 2) {
 			aux = map2;
 			mapSelected = 2;
 		}else if(mapId == 3) {
@@ -99,6 +101,9 @@ public class Map extends GameObject {
 
 	public int getMapSelected() {
 		return mapSelected;
+	}
+	public int getMapSize(int mapId) {
+		return mapSizes[mapId-1];
 	}
 
 }
