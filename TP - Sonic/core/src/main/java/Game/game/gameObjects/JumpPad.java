@@ -15,8 +15,6 @@ public class JumpPad extends GameObject{
 	private JumpPadsAnimationManager animationManager;
 	
 	public JumpPad(float posX, float posY, int map, JumpPadsAnimationManager animationManager) {
-		//image = new Sprite(new Texture(Gdx.files.internal("trampolim.png")));
-		//image.setSize(64, 64);
 		
 		this.animationManager = animationManager;
 		setPosition(posX, posY);
@@ -25,13 +23,10 @@ public class JumpPad extends GameObject{
 		belongingMap = map;
 		
 		this.bounds = new Rectangle(posX, posY, 64, 64);
-		//this.bounds = image.getBoundingRectangle();
 	}
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		//batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
-		
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
 		this.bounds = new Rectangle(currentFrame.getRegionX(), currentFrame.getRegionY(), currentFrame.getRegionWidth(),
 				currentFrame.getRegionHeight());

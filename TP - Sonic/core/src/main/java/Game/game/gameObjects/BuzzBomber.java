@@ -12,9 +12,6 @@ public class BuzzBomber extends Enemy {
 	private BuzzBomberAnimationManager animationManager;
 	
 	public BuzzBomber() {
-		//image = new Sprite(new Texture(Gdx.files.internal("mosca.jpg")));
-		//image.setSize(128, 128);
-
 		animationManager = new BuzzBomberAnimationManager();
 		setPosition(200, 800);
 		setWidth(64);
@@ -23,7 +20,6 @@ public class BuzzBomber extends Enemy {
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		//batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
 		batch.draw(currentFrame, this.getX(), this.getY(), this.getWidth(), this.getHeight());	
 	}

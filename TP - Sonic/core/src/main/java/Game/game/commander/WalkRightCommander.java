@@ -19,4 +19,5 @@ public class WalkRightCommander extends Commander {
 		}
 
 	}
+
 }

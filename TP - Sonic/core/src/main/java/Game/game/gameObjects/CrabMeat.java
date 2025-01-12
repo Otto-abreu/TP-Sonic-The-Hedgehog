@@ -12,10 +12,6 @@ public class CrabMeat extends Enemy {
 	private CrabmeatAnimationManager animationManager;
 	
 	public CrabMeat() {
-
-		//image = new Sprite(new Texture(Gdx.files.internal("crab.jpg")));
-		//image.setSize(128, 128);
-		
 		animationManager = new CrabmeatAnimationManager();
 		setPosition(200, 1000);
 		setWidth(64);
@@ -25,7 +21,6 @@ public class CrabMeat extends Enemy {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		//batch.draw(image, this.getX(), this.getY(), image.getWidth(), image.getHeight());
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
 		batch.draw(currentFrame, this.getX(), this.getY(), this.getWidth(), this.getHeight());	
 	}

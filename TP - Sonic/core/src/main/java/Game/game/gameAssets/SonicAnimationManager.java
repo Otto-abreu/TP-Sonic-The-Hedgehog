@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 public class SonicAnimationManager extends TextureManager {
 	private Animation<TextureRegion> basicMotionRight;
 	private Animation<TextureRegion> basicMotionLeft;
+	private Animation<TextureRegion> idleAnimation;
 	private Animation<TextureRegion> jumpingAnimation;
 	private float stateTime;
 	private String currentAction;
@@ -21,9 +22,10 @@ public class SonicAnimationManager extends TextureManager {
 
 	@Override
 	public void loadTextures() {
-		basicMotionRight = loadAnimation("sonicBasicMotion/sonicBasicMotion", 6, 0.2f);
-		basicMotionLeft = loadAnimation("sonicBasicMotion/sonicBasicMotionLeft", 6, 0.2f);
-		jumpingAnimation = loadAnimation("sonicJumping/sonicJumping", 7, 0.02f);
+		basicMotionRight = loadAnimation("sonicBasicMotion/sonicBasicMotion", 4, 0.2f);
+		basicMotionLeft = loadAnimation("sonicBasicMotion/sonicBasicMotionLeft", 4, 0.2f);
+		idleAnimation = loadAnimation("sonicIdle/sonicIdle", 2, 0.2f);
+		jumpingAnimation = loadAnimation("sonicJumping/sonicJumping", 7, 0.01f);
 
 	}
 
@@ -50,15 +52,15 @@ public class SonicAnimationManager extends TextureManager {
 
 	    switch (currentAction) {
 	        case "idle":
-	            return basicMotionRight.getKeyFrame(0, false);
+	            return idleAnimation.getKeyFrame(stateTime, true);
 	        case "walkRight":
 	            return basicMotionRight.getKeyFrame(stateTime, true);
 	        case "walkLeft":
-	            return basicMotionLeft.getKeyFrame(stateTime, false);
+	            return basicMotionLeft.getKeyFrame(stateTime, true);
 	        case "jump":
-	            return jumpingAnimation.getKeyFrame(stateTime, false);
+	            return jumpingAnimation.getKeyFrame(stateTime, true);
 	        default:
-	            return basicMotionRight.getKeyFrame(0, false);
+	            return idleAnimation.getKeyFrame(stateTime, true);
 	    }
 	}
 

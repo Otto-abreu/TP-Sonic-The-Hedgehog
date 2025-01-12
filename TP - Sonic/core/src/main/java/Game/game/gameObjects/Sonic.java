@@ -63,8 +63,6 @@ public class Sonic extends GameObject {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		// batch.draw(image, this.getX(), this.getY(), image.getWidth(),
-		// image.getHeight());
 		TextureRegion currentFrame = animationManager.getCurrentFrame(Gdx.graphics.getDeltaTime());
 		this.bounds = new Rectangle(currentFrame.getRegionX(), currentFrame.getRegionY(), currentFrame.getRegionWidth(),
 				currentFrame.getRegionHeight());
@@ -126,7 +124,6 @@ public class Sonic extends GameObject {
 
 		if (this.bounds.overlaps(jumpPad.getBounds())) {
 			jumpPadTouched = true;
-			// jumpPad.activate();
 			returnValue = true;
 		}
 
