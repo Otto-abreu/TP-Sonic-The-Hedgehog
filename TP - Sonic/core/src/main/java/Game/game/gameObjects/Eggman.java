@@ -1,10 +1,9 @@
 package Game.game.gameObjects;
 
 import Game.game.gameAssets.EggManAnimationManager;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Eggman extends Enemy{

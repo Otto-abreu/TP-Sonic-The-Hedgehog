@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import Game.game.gameStage.GameStage;
 
 
-public class VictoryState extends StageState{
+public class VictoryState implements StageState{
 	
 	private Sprite victoryScreen;
 	private Rectangle playAgainButton;
@@ -28,7 +28,6 @@ public class VictoryState extends StageState{
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) 
 				&& playAgainButton.contains(mousePosX, stage.getWindowSize().y - mousePosY)) {
 			buttonClicked = true;
-			System.out.println(buttonClicked);
 		}
 	}
 	

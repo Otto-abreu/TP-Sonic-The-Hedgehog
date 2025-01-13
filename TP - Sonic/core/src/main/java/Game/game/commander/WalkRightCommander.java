@@ -2,7 +2,7 @@ package Game.game.commander;
 
 import Game.game.gameObjects.Sonic;
 
-public class WalkRightCommander extends Commander {
+public class WalkRightCommander implements Commander {
 
 	public WalkRightCommander() {
 		// TODO Auto-generated constructor stub

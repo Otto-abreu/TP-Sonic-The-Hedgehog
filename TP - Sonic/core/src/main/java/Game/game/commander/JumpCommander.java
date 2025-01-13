@@ -2,7 +2,7 @@ package Game.game.commander;
 
 import Game.game.gameObjects.Sonic;
 
-public class JumpCommander extends Commander {
+public class JumpCommander implements Commander {
 
 	public JumpCommander() {
 		// TODO Auto-generated constructor stub

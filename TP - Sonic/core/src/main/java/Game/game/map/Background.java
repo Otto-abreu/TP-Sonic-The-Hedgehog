@@ -1,15 +1,16 @@
-package Game.game.gameObjects;
+package Game.game.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Background extends GameObject {
+public class Background extends Actor {
 
 	private Vector2 initialPosition;
-	private int sonicLives = -1;
+	private Sprite image;
 
 	public Background() {
 		image = new Sprite(new Texture(Gdx.files.internal("background.png")));

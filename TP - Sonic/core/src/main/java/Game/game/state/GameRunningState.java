@@ -2,6 +2,7 @@ package Game.game.state;
 
 import java.util.ArrayList;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,21 +13,19 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import Game.game.gameAssets.CoinAnimationManager;
 import Game.game.gameAssets.JumpPadsAnimationManager;
-import Game.game.gameObjects.Background;
 import Game.game.gameObjects.BuzzBomber;
 import Game.game.gameObjects.Coin;
 import Game.game.gameObjects.CrabMeat;
 import Game.game.gameObjects.Eggman;
 import Game.game.gameObjects.JumpPad;
-import Game.game.gameObjects.Map;
 import Game.game.gameObjects.Sonic;
 import Game.game.gameStage.GameStage;
+import Game.game.map.*;
 
-public class GameRunningState extends StageState {
+public class GameRunningState implements StageState {
 
 	private Map map;
 	private Sonic sonic;
-	private Background background;
 	private OrthographicCamera camera;
 	private CoinAnimationManager coinAnimationManager = new CoinAnimationManager();
 	private JumpPadsAnimationManager jumpPadsAnimationManager = new JumpPadsAnimationManager();
@@ -51,9 +50,7 @@ public class GameRunningState extends StageState {
 
 		sonic = Sonic.getInstance((TiledMapTileLayer) map.getMap().getLayers().get("1"));
 
-		background = new Background();
-
-		stage.addActor(background);
+		stage.addActor(map.getBackground());
 		stage.addActor(sonic);
 		stage.addActor(map);
 
@@ -146,7 +143,7 @@ public class GameRunningState extends StageState {
 
 			map.chengeMap(map.getMapSelected() + 1);
 
-			background.initialPos();
+			map.getBackground().initialPos();
 
 			sonic.setCollisionLayer((TiledMapTileLayer) map.getMap().getLayers().get("1"));
 			sonic.setInitialPosition();
@@ -162,7 +159,7 @@ public class GameRunningState extends StageState {
 
 			map.chengeMap(map.getMapSelected() + 1);
 
-			background.initialPos();
+			map.getBackground().initialPos();
 
 			sonic.setCollisionLayer((TiledMapTileLayer) map.getMap().getLayers().get("1"));
 			sonic.setInitialPosition();
@@ -191,7 +188,7 @@ public class GameRunningState extends StageState {
 		removeJumpPads(map.getMapSelected(), stage);
 		removeRemainingCoins(map.getMapSelected(), stage);
 
-		background.initialPos();
+		map.getBackground().initialPos();
 
 		map.chengeMap(1);
 
@@ -408,6 +405,11 @@ public class GameRunningState extends StageState {
 
 	public Sonic getSonic() {
 		return sonic;
+	}
+
+	@Override
+	public void handleInput(GameStage stage) {
+
 	}
 
 }

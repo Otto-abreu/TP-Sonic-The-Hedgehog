@@ -2,11 +2,10 @@ package Game.game.state;
 
 import Game.game.gameStage.GameStage;
 
-public class StageState {
+public interface StageState {
 
-	public StageState() {
-		
-	}
-	public void update(GameStage stage) {}
-	
+
+	public void update(GameStage stage);
+	public void handleInput(GameStage stage);
+
 }

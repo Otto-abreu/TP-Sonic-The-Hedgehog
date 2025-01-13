@@ -1,6 +1,7 @@
 package Game.game.gameObjects;
 
 import Game.game.gameAssets.SonicAnimationManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import Game.game.commander.InputHandler;
+import Game.game.map.*;
 
 public class Sonic extends GameObject {
 
@@ -26,7 +28,6 @@ public class Sonic extends GameObject {
 	private boolean jumpPadTouched = false;
 	private static Sonic instance;
 	private Vector2 initialPosition;
-	private boolean isDead = false;
 
 	private InputHandler inputHandler;
 
@@ -164,44 +165,35 @@ public class Sonic extends GameObject {
 		if (speed.x > 0) {
 
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
-			Vector2 rightMiddleBlockPos, rightTopBlockPos, rightBottomBlockPos;
+			Vector2 rightMiddleBlockPos, rightTopBlockPos;
 			rightTopBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
 					(getY() + getHeight()) / (tileHeight / 2));
 			rightMiddleBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
 					(getY() + getHeight() / 2) / (tileHeight / 2));
-			rightBottomBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2), getY() / (tileHeight / 2));
 
 			Cell cellMiddle = collisionLayer.getCell((int) rightMiddleBlockPos.x, (int) rightMiddleBlockPos.y);
 			Cell cellTop = collisionLayer.getCell((int) rightTopBlockPos.x, (int) rightTopBlockPos.y);
-			Cell cellBottom = collisionLayer.getCell((int) rightBottomBlockPos.x, (int) rightBottomBlockPos.y);
 
 			collisionX = checkCellCollision(cellTop);
 			if (collisionX == false)
 				collisionX = checkCellCollision(cellMiddle);
-			/*
-			 * if (collisionX == false) collisionX = checkCellCollision(cellBottom);
-			 */
+
 		}
 
 		else if (speed.x < 0) {
 
 			float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
-			Vector2 leftMiddleBlockPos, leftTopBlockPos, leftBottomBlockPos;
+			Vector2 leftMiddleBlockPos, leftTopBlockPos;
 
 			leftTopBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight()) / (tileHeight / 2));
 			leftMiddleBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight() / 2) / (tileHeight / 2));
-			leftBottomBlockPos = new Vector2(getX() / (tileWidth / 2), getY() / (tileHeight / 2));
 
 			Cell cellTop = collisionLayer.getCell((int) leftTopBlockPos.x, (int) leftTopBlockPos.y);
 			Cell cellMiddle = collisionLayer.getCell((int) leftMiddleBlockPos.x, (int) leftMiddleBlockPos.y);
-			Cell cellBottom = collisionLayer.getCell((int) leftBottomBlockPos.x, (int) leftBottomBlockPos.y);
 
 			collisionX = checkCellCollision(cellTop);
 			if (collisionX == false)
 				collisionX = checkCellCollision(cellMiddle);
-			/*
-			 * if (collisionX == false) collisionX = checkCellCollision(cellBottom);
-			 */
 		}
 
 		if (collisionX == true) {

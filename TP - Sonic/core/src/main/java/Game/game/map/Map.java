@@ -1,23 +1,29 @@
-package Game.game.gameObjects;
+package Game.game.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Map extends GameObject {
+public class Map extends Actor {
 
 	private TiledMap map1;
 	private TiledMap map2;
 	private TiledMap map3;
-	private int[] mapSizes = {21697, 36930, 39050};
-	private OrthogonalTiledMapRenderer mapRenderer;
-	private static final float ppm = 2;
-	private OrthographicCamera camera;
-	private static Map instance;
-	private static final float gravity = (float) 0.1;
+	private final int[] mapSizes = {21697, 36930, 39050};
 	private int mapSelected = 1;
+	private static Map instance;
+	private static final float ppm = 2;
+	
+	private OrthogonalTiledMapRenderer mapRenderer;
+
+	private OrthographicCamera camera;
+	
+	private static final float gravity = (float) 0.1;
+
+	private Background background;
 
 	public static Map getInstance(OrthographicCamera camera) {
 		if (instance == null) {
@@ -36,6 +42,7 @@ public class Map extends GameObject {
 
 		mapRenderer = new OrthogonalTiledMapRenderer(map1, 1 / ppm);
 		
+		background = new Background();
 	}
 
 	@Override
@@ -105,5 +112,11 @@ public class Map extends GameObject {
 	public int getMapSize(int mapId) {
 		return mapSizes[mapId-1];
 	}
+
+	public Background getBackground() {
+		return background;
+	}
+	
+	
 
 }

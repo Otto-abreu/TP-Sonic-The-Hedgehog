@@ -1,7 +1,6 @@
 package Game.game.gameStage;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,6 +10,7 @@ import Game.game.gameScreen.GameScreen;
 import Game.game.state.GameOverState;
 import Game.game.state.GameRunningState;
 import Game.game.state.HomeScreenState;
+import Game.game.state.InformationalState;
 import Game.game.state.StageState;
 import Game.game.state.VictoryState;
 
@@ -32,7 +32,7 @@ public class GameStage extends Stage {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.wav"));
 		music.setLooping(true);
 
-		stageState = new HomeScreenState();
+		stageState = (StageState) new HomeScreenState();
 
 	}
 
@@ -50,16 +50,16 @@ public class GameStage extends Stage {
 			GameRunningState state = GameRunningState.getInstance(this);
 			super.draw();
 			batch.begin();
-			
+
 			state.getYellowFont().draw(batch, "SCORE", 10, 940);
 			state.getWhiteFont().draw(batch, "Ainda n temos pontuacao", 170, 940);
-			
+
 			state.getYellowFont().draw(batch, "TIME", 10, 910);
 			state.getWhiteFont().draw(batch, String.format("%.2f", state.getElapsedTime()), 170, 910);
-			
+
 			state.getYellowFont().draw(batch, "RINGS", 10, 880);
 			state.getWhiteFont().draw(batch, "" + state.getSonic().getCoinsCollected(), 170, 880);
-			
+
 			batch.end();
 
 		}
@@ -82,10 +82,23 @@ public class GameStage extends Stage {
 
 		}
 
+		if (stageState instanceof InformationalState) {
+			InformationalState state = (InformationalState) stageState;
+			batch.begin();
+			batch.draw(state.getInfoScreen(), state.getInfoScreen().getX(), state.getInfoScreen().getY(),
+					state.getInfoScreen().getWidth(), state.getInfoScreen().getHeight());
+			batch.end();
+
+		}
+
 	}
 
 	@Override
 	public void act(float delta) {
+
+		int mousePosX = Gdx.input.getX();
+		int mousePosY = Gdx.input.getY();
+		System.out.println(mousePosX + " - " + (getWindowSize().y - mousePosY));
 
 		this.delta = delta;
 		super.act(delta);
@@ -94,30 +107,8 @@ public class GameStage extends Stage {
 			music.play();
 		}
 
-		if (stageState instanceof HomeScreenState) {
-			HomeScreenState state = (HomeScreenState) stageState;
-			state.handleInput(this);
-			state.update(this);
-
-		}
-
-		if (stageState instanceof GameRunningState) {
-			GameRunningState state = (GameRunningState) stageState;
-			state.update(this);
-
-		}
-
-		if (stageState instanceof VictoryState) {
-			VictoryState state = (VictoryState) stageState;
-			state.handleInput(this);
-			state.update(this);
-		}
-
-		if (stageState instanceof GameOverState) {
-			GameOverState state = (GameOverState) stageState;
-			state.handleInput(this);
-			state.update(this);
-		}
+		stageState.update(this);
+		stageState.handleInput(this);
 
 	}
 
@@ -127,7 +118,7 @@ public class GameStage extends Stage {
 	}
 
 	public void setState(StageState state) {
-		this.stageState = state;
+		stageState = state;
 	}
 
 	public Vector2 getWindowSize() {
