@@ -17,9 +17,9 @@ public class HomeScreenState implements StageState {
 	private boolean infoButtonClicked = false;
 
 	public HomeScreenState() {
-		startButton = new Rectangle(174, 371, 554, 116);
-		infoButton = new Rectangle(179, 83, 554, 116);
-		homeScreen = new Sprite(new Texture(Gdx.files.internal("HomeScreen1.png")));
+		startButton = new Rectangle(174, 346, 554, 116);
+		infoButton = new Rectangle(179, 160, 554, 116);
+		homeScreen = new Sprite(new Texture(Gdx.files.internal("HomeScreen.png")));
 		homeScreen.setPosition(0, 0);
 	}
 
