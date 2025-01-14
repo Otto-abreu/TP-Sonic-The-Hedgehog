@@ -96,10 +96,6 @@ public class GameStage extends Stage {
 	@Override
 	public void act(float delta) {
 
-		int mousePosX = Gdx.input.getX();
-		int mousePosY = Gdx.input.getY();
-		System.out.println(mousePosX + " - " + (getWindowSize().y - mousePosY));
-
 		this.delta = delta;
 		super.act(delta);
 

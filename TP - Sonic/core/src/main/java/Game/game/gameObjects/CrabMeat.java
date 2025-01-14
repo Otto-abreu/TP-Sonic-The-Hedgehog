@@ -6,15 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class CrabMeat extends Enemy {
+public class CrabMeat extends Enemy{
 
 	private CrabmeatAnimationManager animationManager;
 	
-	public CrabMeat() {
+	public CrabMeat(int posX, int posY) {
+		super(posX, posY);
 		animationManager = new CrabmeatAnimationManager();
-		setPosition(200, 1000);
-		setWidth(64);
-		setHeight(64);
 	}
 	
 
@@ -27,6 +25,9 @@ public class CrabMeat extends Enemy {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		
+		if(chasing) {
+			move();
+		}
 	}
-
 }

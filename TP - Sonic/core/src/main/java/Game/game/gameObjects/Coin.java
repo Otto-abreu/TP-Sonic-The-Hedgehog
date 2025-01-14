@@ -10,6 +10,8 @@ public class Coin extends GameObject{
 	private static int quantity = 0;
 	private int id;
 	
+	private static int contactRange = 50;
+	
 	private int belongingMap;
 	
 	private CoinAnimationManager animationManager;
@@ -47,6 +49,10 @@ public class Coin extends GameObject{
 	
 	public int getId() {
 		return id;
+	}
+	
+	public static int getContactRange() {
+		return contactRange;
 	}
 
 }

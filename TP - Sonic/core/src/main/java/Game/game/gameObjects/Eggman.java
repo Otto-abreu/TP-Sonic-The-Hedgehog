@@ -10,11 +10,10 @@ public class Eggman extends Enemy{
 
 	private EggManAnimationManager animationManager;
 	
-	public Eggman() {
+	public Eggman(float posX, float posY) {
+		super(posX, posY);
 		animationManager = new EggManAnimationManager();
-		setPosition(00, 1000);
-		setWidth(64);
-		setHeight(64);
+
 	}
 	
 

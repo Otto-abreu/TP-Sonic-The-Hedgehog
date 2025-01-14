@@ -2,7 +2,6 @@ package Game.game.state;
 
 import java.util.ArrayList;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
 import Game.game.gameAssets.CoinAnimationManager;
 import Game.game.gameAssets.JumpPadsAnimationManager;
@@ -17,10 +18,12 @@ import Game.game.gameObjects.BuzzBomber;
 import Game.game.gameObjects.Coin;
 import Game.game.gameObjects.CrabMeat;
 import Game.game.gameObjects.Eggman;
+import Game.game.gameObjects.Enemy;
 import Game.game.gameObjects.JumpPad;
 import Game.game.gameObjects.Sonic;
 import Game.game.gameStage.GameStage;
 import Game.game.map.*;
+import Game.game.observer.Subscriber;
 
 public class GameRunningState implements StageState {
 
@@ -33,6 +36,7 @@ public class GameRunningState implements StageState {
 	private BitmapFont fontYellow;
 	private BitmapFont fontWhite;
 	private float elapsedTime = 0;
+	private Array<Subscriber> enemies;
 
 	public static GameRunningState getInstance(GameStage stage) {
 		if (instance == null) {
@@ -54,30 +58,33 @@ public class GameRunningState implements StageState {
 		stage.addActor(sonic);
 		stage.addActor(map);
 
-		stage.addActor(new CrabMeat());
-		stage.addActor(new BuzzBomber());
-		stage.addActor(new Eggman());
+		CrabMeat crabMeat = new CrabMeat(2564, 640);
+		enemies = new Array<Subscriber>();
+		subscribeEnemy(crabMeat, stage.getActors());
+
+		stage.addActor(new BuzzBomber(100, 1000));
+		stage.addActor(new Eggman(200, 1000));
 
 		addJumpPads(map.getMapSelected(), stage);
 		addCoins(map.getMapSelected(), stage);
-		
+
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pixelifySans.ttf"));
-		
+
 		FreeTypeFontParameter parameterYellow = new FreeTypeFontParameter();
 		parameterYellow.size = 36;
 		parameterYellow.color = Color.YELLOW;
 		fontYellow = generator.generateFont(parameterYellow);
-		
+
 		FreeTypeFontParameter parameterWhite = new FreeTypeFontParameter();
 		parameterWhite.size = 36;
 		parameterWhite.color = Color.WHITE;
 		fontWhite = generator.generateFont(parameterWhite);
-		
+
 	}
 
 	@Override
 	public void update(GameStage stage) {
-		System.out.println(elapsedTime);
+
 		elapsedTime += Gdx.graphics.getDeltaTime();
 
 		for (int i = 0; i < stage.getActors().size; i++) {
@@ -94,6 +101,7 @@ public class GameRunningState implements StageState {
 				Background aux = (Background) stage.getActors().get(i);
 				aux.move(sonic.getSpeedX(), sonic.getSpeedY());
 			}
+
 		}
 
 		ArrayList<JumpPad> closeJumpPads = getCloserJumpPad(stage);
@@ -104,10 +112,18 @@ public class GameRunningState implements StageState {
 		}
 
 		if (sonic.isDead()) {
-			
 			setInitialGameConfig(stage);
 			stage.setState(new GameOverState());
+		}
 
+		for (int i = 0; i < enemies.size; i++) {
+			Enemy aux = (Enemy) enemies.get(i);
+			if (sonic.getX() - aux.getX() <= Enemy.getSeekingRange()
+					&& sonic.getX() - aux.getX() >= -Enemy.getSeekingRange()) {
+				sendNotification(enemies.get(i), sonic.getX(), true);
+			}else {
+				sendNotification(enemies.get(i), sonic.getX(), false);
+			}
 		}
 		handleLevelChange(stage);
 
@@ -122,8 +138,10 @@ public class GameRunningState implements StageState {
 		for (int i = 0; i < stage.getActors().size; i++) {
 			if (stage.getActors().get(i) instanceof JumpPad) {
 				aux = (JumpPad) stage.getActors().get(i);
-				if ((sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
-						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50) == false) {
+				if ((sonic.getX() - aux.getX() <= JumpPad.getContactRange()
+						&& sonic.getX() - aux.getX() >= -JumpPad.getContactRange()
+						&& sonic.getY() - aux.getY() <= JumpPad.getContactRange()
+						&& sonic.getY() - aux.getY() >= -JumpPad.getContactRange()) == false) {
 					aux = null;
 				} else {
 
@@ -214,8 +232,10 @@ public class GameRunningState implements StageState {
 		for (int i = 0; i < stage.getActors().size; i++) {
 			if (stage.getActors().get(i) instanceof Coin) {
 				Coin aux = (Coin) stage.getActors().get(i);
-				if ((sonic.getX() - aux.getX() <= 50 && sonic.getX() - aux.getX() >= -50
-						&& sonic.getY() - aux.getY() <= 50 && sonic.getY() - aux.getY() >= -50)) {
+				if ((sonic.getX() - aux.getX() <= Coin.getContactRange()
+						&& sonic.getX() - aux.getX() >= -Coin.getContactRange()
+						&& sonic.getY() - aux.getY() <= Coin.getContactRange()
+						&& sonic.getY() - aux.getY() >= -Coin.getContactRange())) {
 					collectCoin(aux.getId(), stage);
 				}
 			}
@@ -392,13 +412,15 @@ public class GameRunningState implements StageState {
 			break;
 		}
 	}
-	
+
 	public BitmapFont getYellowFont() {
 		return fontYellow;
 	}
+
 	public BitmapFont getWhiteFont() {
 		return fontWhite;
 	}
+
 	public float getElapsedTime() {
 		return elapsedTime;
 	}
@@ -410,6 +432,23 @@ public class GameRunningState implements StageState {
 	@Override
 	public void handleInput(GameStage stage) {
 
+	}
+
+	public void subscribeEnemy(Subscriber newSubscriber, Array<Actor> actorsInStage) {
+		enemies.add(newSubscriber);
+
+		actorsInStage.add((Enemy) newSubscriber);
+
+	}
+
+	public void unsubscribeEnemy(Subscriber subscriberToDelete, Array<Actor> actorsInStage) {
+		enemies.removeValue(subscriberToDelete, false);
+
+		actorsInStage.removeValue((Enemy) subscriberToDelete, false);
+	}
+
+	public void sendNotification(Subscriber subscriber, float targetPos, boolean chase) {
+		subscriber.receiveUpdate(targetPos, chase);
 	}
 
 }

@@ -77,7 +77,7 @@ public class Sonic extends GameObject {
 
 		update();
 
-		//System.out.println(getX() + " - " + getY());
+		System.out.println(getX() + " - " + getY());
 
 	}
 
@@ -337,7 +337,7 @@ public class Sonic extends GameObject {
 	}
 	
 	public boolean isDead() {
-		return getY() <= 10 && coinsCollected == 0;
+		return getY() <= -10 && coinsCollected == 0;
 	}
 
 }

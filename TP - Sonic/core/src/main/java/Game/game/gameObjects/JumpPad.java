@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class JumpPad extends GameObject{
 	
 	private int belongingMap;
+	private static final int contactRange = 50;
 	
 	private JumpPadsAnimationManager animationManager;
 	
@@ -43,6 +44,10 @@ public class JumpPad extends GameObject{
 	
 	public int getBelongingMap() {
 		return belongingMap;
+	}
+	
+	public static int getContactRange() {
+		return contactRange;
 	}
 
 

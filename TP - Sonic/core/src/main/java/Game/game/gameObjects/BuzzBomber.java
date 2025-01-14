@@ -6,15 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class BuzzBomber extends Enemy {
+public class BuzzBomber extends Enemy{
 
 	private BuzzBomberAnimationManager animationManager;
 	
-	public BuzzBomber() {
+	public BuzzBomber(float posX, float posY) {
+		super(posX, posY);
 		animationManager = new BuzzBomberAnimationManager();
-		setPosition(200, 800);
-		setWidth(64);
-		setHeight(64);
 	}
 	
 	@Override
