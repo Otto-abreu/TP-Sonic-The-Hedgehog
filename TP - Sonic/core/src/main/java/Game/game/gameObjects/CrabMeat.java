@@ -18,6 +18,7 @@ public class CrabMeat extends Enemy {
 		super(posX, posY);
 		animationManager = new CrabmeatAnimationManager();
 		this.collisionLayer = collisionLayer;
+		velocity = 3;
 	}
 
 	@Override
