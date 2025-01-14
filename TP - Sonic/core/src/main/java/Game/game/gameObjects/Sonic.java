@@ -19,8 +19,8 @@ public class Sonic extends GameObject {
 	private int coinsCollected = 0;
 	private Vector2 speed;
 	private Vector2 oldPosition;
-	private final float finalSpeedX = 5;
-	private final float finalSpeedY = 5;
+	private final float maxSpeedX = 5;
+	private final float maxSpeedY = 5;
 	private final int jumpPadLaunchSpeed = 10;
 	private final float acelerationX = (float) 0.2;
 	private final float decelerationX = (float) 0.1;
@@ -298,11 +298,11 @@ public class Sonic extends GameObject {
 	}
 
 	public float getFinalSpeedX() {
-		return finalSpeedX;
+		return maxSpeedX;
 	}
 
 	public float getFinalSpeedY() {
-		return finalSpeedY;
+		return maxSpeedY;
 	}
 
 	public float getAcelerationX() {

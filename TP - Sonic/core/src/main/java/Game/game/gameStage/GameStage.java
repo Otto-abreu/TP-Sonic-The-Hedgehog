@@ -100,7 +100,7 @@ public class GameStage extends Stage {
 		super.act(delta);
 
 		if (!music.isPlaying()) {
-			music.play();
+			//music.play();
 		}
 
 		stageState.update(this);

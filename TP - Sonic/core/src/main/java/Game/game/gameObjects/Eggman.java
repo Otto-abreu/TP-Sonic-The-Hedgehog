@@ -5,6 +5,7 @@ import Game.game.gameAssets.EggManAnimationManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Eggman extends Enemy{
 

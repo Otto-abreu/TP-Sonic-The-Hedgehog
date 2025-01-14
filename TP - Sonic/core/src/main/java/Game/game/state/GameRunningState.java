@@ -58,7 +58,7 @@ public class GameRunningState implements StageState {
 		stage.addActor(sonic);
 		stage.addActor(map);
 
-		CrabMeat crabMeat = new CrabMeat(2564, 640);
+		CrabMeat crabMeat = new CrabMeat(2564, 640, (TiledMapTileLayer) map.getMap().getLayers().get("1"));
 		enemies = new Array<Subscriber>();
 		subscribeEnemy(crabMeat, stage.getActors());
 
