@@ -12,7 +12,7 @@ public class Map extends Actor {
 	private TiledMap map1;
 	private TiledMap map2;
 	private TiledMap map3;
-	private final int[] mapSizes = {21697, 36930, 39050};
+	private final int[] mapSizes = {21697, 36930, 40860};
 	private int mapSelected = 1;
 	private static Map instance;
 	private static final float ppm = 2;

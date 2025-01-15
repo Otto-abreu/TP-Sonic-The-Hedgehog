@@ -25,6 +25,9 @@ public class Background extends Actor {
 		batch.draw(image, image.getX(), image.getY(), image.getWidth(), image.getHeight());
 		batch.draw(image, image.getX() + image.getWidth(), image.getY(), image.getWidth(), image.getHeight());
 		batch.draw(image, image.getX() + image.getWidth() * 2, image.getY(), image.getWidth(), image.getHeight());
+		batch.draw(image, image.getX() + image.getWidth() * 3, image.getY(), image.getWidth(), image.getHeight());
+		batch.draw(image, image.getX() + image.getWidth() * 4, image.getY(), image.getWidth(), image.getHeight());
+		batch.draw(image, image.getX() + image.getWidth() * 5, image.getY(), image.getWidth(), image.getHeight());
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Eggman extends Enemy {
 	
-	private int lives = 6;
+	private int lives = 10;
 	private EggManAnimationManager animationManager;
 
 	public Eggman(float posX, float posY, int map) {

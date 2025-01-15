@@ -63,7 +63,9 @@ public class GameStage extends Stage {
 
 			state.getYellowFont().draw(batch, "RINGS", 10, 880);
 			state.getWhiteFont().draw(batch, "" + state.getSonic().getCoinsCollected(), 170, 880);
-
+			
+			state.getYellowFont().draw(batch, "LEVEL", 10, 850);
+			state.getWhiteFont().draw(batch, "" + state.getMap().getMapSelected(), 170, 850);
 			batch.end();
 
 		}
