@@ -8,13 +8,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Eggman extends Enemy {
-
+	
+	private int lives = 6;
 	private EggManAnimationManager animationManager;
 
-	public Eggman(float posX, float posY) {
-		super(posX, posY);
+	public Eggman(float posX, float posY, int map) {
+		super(posX, posY, map);
 		animationManager = new EggManAnimationManager();
-
+		initialPos.x = getX();
+		initialPos.y = getY();
+		velocity = 1.5;
+		points = 1500;
 	}
 
 	@Override
@@ -36,18 +40,61 @@ public class Eggman extends Enemy {
 		return getX() >= initialPos.x + seekingRange || getX() <= initialPos.x - seekingRange;
 	}
 
-	public void move() {
-		if (!isOutOfSeekingRange()) {
+	public boolean targetOutOfSeekingRange() {
+		return target.getX() - initialPos.x >= seekingRange || target.getX() - initialPos.x <= -seekingRange;
+	}
 
-			if (targetPos < getX()) {
-				speed = -velocity;
+	public void move() {
+		if (chasing) {
+			if (!this.isOutOfSeekingRange() && !this.targetOutOfSeekingRange()) {
+
+				if (target.getX() < getX()) {
+					animationManager.setAction("movementLeft");
+					setX((float) (getX() - velocity));
+
+				}
+				if (target.getX() > getX()) {
+					animationManager.setAction("movementRight");
+					setX((float) (getX() + velocity));
+
+				}
+
+				if (target.getY() < getY()) {
+					setY((float) (getY() - velocity));
+				}
+
+				if (target.getY() > getY()) {
+					setY((float) (getY() + velocity));
+				}
+
+			} 
+		}
+		if(!chasing) {
+			if (initialPos.x < getX()) {
 				animationManager.setAction("movementLeft");
+				setX((float) (getX() - velocity));
+
 			}
-			if (targetPos > getX()) {
-				speed = velocity;
+			if (initialPos.x > getX()) {
 				animationManager.setAction("movementRight");
+				setX((float) (getX() + velocity));
+
+			}
+			if (initialPos.y < getY()) {
+				setY((float) (getY() - velocity));
+			}
+			if (initialPos.y > getY()) {
+				setY((float) (getY() + velocity));
 			}
 		}
 	}
 
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+	
 }

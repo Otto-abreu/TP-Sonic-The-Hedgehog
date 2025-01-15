@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.Gdx;
 
 public class BuzzBomberAnimationManager extends TextureManager {
-	private Animation<TextureRegion> buzzAnimation;
 	private Animation<TextureRegion> buzzLeftAnimation;
+	private Animation<TextureRegion> buzzRightAnimation;
 	private float stateTime;
 	private String currentAction = "movementRight";
 
@@ -19,8 +19,8 @@ public class BuzzBomberAnimationManager extends TextureManager {
 
 	@Override
 	public void loadTextures() {
-		buzzAnimation = loadAnimation("enemy2/buzzBomber", 4, 0.15f);
-		buzzLeftAnimation = loadAnimation("enemy2/buzzBomberLeft", 4, 0.15f);
+		buzzLeftAnimation = loadAnimation("enemy2/buzzBomber", 4, 0.15f);
+		buzzRightAnimation = loadAnimation("enemy2/buzzBomberLeft", 4, 0.15f);
 	}
 
 	private Animation<TextureRegion> loadAnimation(String basePath, int frameCount, float frameDuration) {
@@ -45,12 +45,12 @@ public class BuzzBomberAnimationManager extends TextureManager {
 		stateTime += deltaTime; 
 
 	    switch (currentAction) {
-	        case "movementRight":
-	            return buzzAnimation.getKeyFrame(stateTime, true);
 	        case "movementLeft":
 	            return buzzLeftAnimation.getKeyFrame(stateTime, true);
+	        case "movementRight":
+	            return buzzRightAnimation.getKeyFrame(stateTime, true);
 	        default:
-	            return buzzAnimation.getKeyFrame(stateTime, true);
+	            return buzzLeftAnimation.getKeyFrame(stateTime, true);
 	    }
 	}
 

@@ -28,6 +28,8 @@ public class Sonic extends GameObject {
 	private boolean jumpPadTouched = false;
 	private static Sonic instance;
 	private Vector2 initialPosition;
+	private int score = 0;
+	private boolean diedToEnemy = false;
 
 	private InputHandler inputHandler;
 
@@ -111,13 +113,9 @@ public class Sonic extends GameObject {
 		oldPosition.y = getY();
 		setY(getY() + speed.y);
 
-		handleCollision(oldPosition.x, oldPosition.y);
+		handleCollision();
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		
-		if(getY() <= -10) {
-			reSpawn();
-		}
 	}
 
 	public boolean checkJumpPadTouch(JumpPad jumpPad) {
@@ -129,6 +127,10 @@ public class Sonic extends GameObject {
 		}
 
 		return returnValue;
+	}
+	
+	public boolean isAttacking() {
+		return speed.y != 0;
 	}
 
 	private void decelerate() {
@@ -149,16 +151,16 @@ public class Sonic extends GameObject {
 		}
 	}
 
-	public void handleCollision(float oldX, float oldY) {
-		checkCollisionOnX(oldX);
-		checkCollisionOnY(oldY);
+	public void handleCollision() {
+		checkCollisionOnX();
+		checkCollisionOnY();
 	}
 
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
 	}
 
-	public void checkCollisionOnX(float oldX) {
+	public void checkCollisionOnX() {
 
 		boolean collisionX = false;
 
@@ -197,13 +199,13 @@ public class Sonic extends GameObject {
 		}
 
 		if (collisionX == true) {
-			setX(oldX);
+			setX(oldPosition.x);
 			speed.x = 0;
 		}
 
 	}
 
-	public void checkCollisionOnY(float oldY) {
+	public void checkCollisionOnY() {
 
 		boolean collisionY = false;
 
@@ -246,7 +248,7 @@ public class Sonic extends GameObject {
 		}
 
 		if (collisionY == true) {
-			setY(oldY);
+			setY(oldPosition.y);
 			speed.y = 0;
 			jumpEnabled = true;
 		} else {
@@ -263,12 +265,22 @@ public class Sonic extends GameObject {
 		}
 		return returnValue;
 	}
+	
+	public void applyKnockback(float direction) {
+		speed.y = 7;
+		if(direction > 0) {
+			speed.x = 7;
+		}
+		if(direction <= 0) {
+			speed.x = -7;
+		}
+	}
 
 	private void applyGravity() {
 		speed.y = speed.y - Map.getGravity();
 	}
 
-	private void reSpawn() {
+	public void reSpawn() {
 		setPosition(initialPosition.x, initialPosition.y);
 		coinsCollected = 0;
 	}
@@ -287,14 +299,6 @@ public class Sonic extends GameObject {
 
 	public void setSpeedY(float speedY) {
 		this.speed.y = speedY;
-	}
-
-	public float getElapsedTime() {
-		return elapsedTime;
-	}
-
-	public void setElapsedTime(float elapsedTime) {
-		this.elapsedTime = elapsedTime;
 	}
 
 	public float getFinalSpeedX() {
@@ -337,7 +341,30 @@ public class Sonic extends GameObject {
 	}
 	
 	public boolean isDead() {
-		return getY() <= -10 && coinsCollected == 0;
+
+		return (getY() <= -10 && coinsCollected == 0) || diedToEnemy;
+	}
+	
+	public boolean tookVoidDamage() {
+		return getY() <= -10 && coinsCollected != 0;
+	}
+	public void receiveEnemyDamage() {
+		if(coinsCollected != 0) {
+			reSpawn();
+		}else {
+			diedToEnemy = true;
+		}
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public void setDiedToEnemy(boolean value) {
+		diedToEnemy = value;
 	}
 
 }

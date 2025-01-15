@@ -52,10 +52,14 @@ public class GameStage extends Stage {
 			batch.begin();
 
 			state.getYellowFont().draw(batch, "SCORE", 10, 940);
-			state.getWhiteFont().draw(batch, "Ainda n temos pontuacao", 170, 940);
-
+			state.getWhiteFont().draw(batch, "" + state.getSonic().getScore(), 170, 940);
+			
+			int totalSeconds = (int) state.getElapsedTime();
+			int minutes = (totalSeconds / 60);
+			float seconds = totalSeconds % 60;
+			
 			state.getYellowFont().draw(batch, "TIME", 10, 910);
-			state.getWhiteFont().draw(batch, String.format("%.2f", state.getElapsedTime()), 170, 910);
+			state.getWhiteFont().draw(batch,  "" + minutes + ":" + String.format("%.0f", seconds), 170, 910);
 
 			state.getYellowFont().draw(batch, "RINGS", 10, 880);
 			state.getWhiteFont().draw(batch, "" + state.getSonic().getCoinsCollected(), 170, 880);

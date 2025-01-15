@@ -13,12 +13,14 @@ public class CrabMeat extends Enemy {
 
 	private CrabmeatAnimationManager animationManager;
 	private TiledMapTileLayer collisionLayer;
-	
-	public CrabMeat(int posX, int posY, TiledMapTileLayer collisionLayer) {
-		super(posX, posY);
+	private double speed;
+
+	public CrabMeat(int posX, int posY, int map, TiledMapTileLayer collisionLayer) {
+		super(posX, posY, map);
 		animationManager = new CrabmeatAnimationManager();
 		this.collisionLayer = collisionLayer;
 		velocity = 3;
+		points = 100;
 	}
 
 	@Override
@@ -43,48 +45,49 @@ public class CrabMeat extends Enemy {
 
 	public boolean nextBlockIsValid() {
 
-		float tileWidth = collisionLayer.getTileWidth();
-		float tileHeight = collisionLayer.getTileHeight();
+		
 		boolean blockIsValid = true;
 
 		if (speed > 0) {
-			Vector2 rightMiddleBlockPos, rightBottomBlockPos;
+			float tileWidth = collisionLayer.getTileWidth();
+			float tileHeight = collisionLayer.getTileHeight();
+			
+			Vector2 rightMiddleBlockPos;
 			rightMiddleBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2),
 					(getY() + getHeight() / 2) / (tileHeight / 2));
-			rightBottomBlockPos = new Vector2((getX() + getWidth()) / (tileWidth / 2), getY() / (tileHeight / 2));
+
 			Cell cellRightMiddle = collisionLayer.getCell((int) rightMiddleBlockPos.x, (int) rightMiddleBlockPos.y);
-			Cell cellRightBottom = collisionLayer.getCell((int) rightBottomBlockPos.x, (int) rightBottomBlockPos.y);
 
 			blockIsValid = checkPossibilityToWalk(cellRightMiddle);
 
 		}
 
 		if (speed < 0) {
-			Vector2 leftMiddleBlockPos, leftBottomBlockPos;
-
+			float tileWidth = collisionLayer.getTileWidth();
+			float tileHeight = collisionLayer.getTileHeight();
+			Vector2 leftMiddleBlockPos;
 			leftMiddleBlockPos = new Vector2(getX() / (tileWidth / 2), (getY() + getHeight() / 2) / (tileHeight / 2));
-			leftBottomBlockPos = new Vector2(getX() / (tileWidth / 2), getY() / (tileHeight / 2));
+
 			Cell cellLeftMiddle = collisionLayer.getCell((int) leftMiddleBlockPos.x, (int) leftMiddleBlockPos.y);
-			Cell cellLeftBottom = collisionLayer.getCell((int) leftBottomBlockPos.x, (int) leftBottomBlockPos.y);
 
 			blockIsValid = checkPossibilityToWalk(cellLeftMiddle);
 		}
 
 		return blockIsValid;
 	}
-	
+
 	@Override
 	public void move() {
 		if (chasing) {
 
-			if (targetPos < getX()) {
+			if (target.getX() < getX()) {
 				speed = -velocity;
 			}
-			if (targetPos > getX()) {
+			if (target.getX() > getX()) {
 				speed = velocity;
 			}
 			if (nextBlockIsValid()) {
-				setX(getX() + speed);
+				setX((float) (getX() + speed));
 			}
 		}
 	}

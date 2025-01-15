@@ -58,15 +58,11 @@ public class GameRunningState implements StageState {
 		stage.addActor(sonic);
 		stage.addActor(map);
 
-		CrabMeat crabMeat = new CrabMeat(2564, 640, (TiledMapTileLayer) map.getMap().getLayers().get("1"));
 		enemies = new Array<Subscriber>();
-		subscribeEnemy(crabMeat, stage.getActors());
-
-		stage.addActor(new BuzzBomber(100, 1000));
-		stage.addActor(new Eggman(200, 1000));
 
 		addJumpPads(map.getMapSelected(), stage);
 		addCoins(map.getMapSelected(), stage);
+		addEnemies(map.getMapSelected(), stage);
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pixelifySans.ttf"));
 
@@ -111,23 +107,66 @@ public class GameRunningState implements StageState {
 			}
 		}
 
-		if (sonic.isDead()) {
-			setInitialGameConfig(stage);
-			stage.setState(new GameOverState());
-		}
-
 		for (int i = 0; i < enemies.size; i++) {
-			Enemy aux = (Enemy) enemies.get(i);
-			if (sonic.getX() - aux.getX() <= Enemy.getSeekingRange()
-					&& sonic.getX() - aux.getX() >= -Enemy.getSeekingRange()) {
-				sendNotification(enemies.get(i), sonic.getX(), true);
-			}else {
-				sendNotification(enemies.get(i), sonic.getX(), false);
+
+			Enemy enemy = (Enemy) enemies.get(i);
+
+			if (sonic.getX() - enemy.getX() <= Enemy.getSeekingRange()
+					&& sonic.getX() - enemy.getX() >= -Enemy.getSeekingRange()) {
+				sendNotification(enemies.get(i), sonic, true);
+
+			} else {
+				sendNotification(enemies.get(i), sonic, false);
 			}
+
+			if (!sonic.isAttacking() && sonic.getX() - enemy.getX() <= Enemy.getContactRange()
+					&& sonic.getX() - enemy.getX() >= -Enemy.getContactRange()
+					&& sonic.getY() - enemy.getY() <= Enemy.getContactRange()
+					&& sonic.getY() - enemy.getY() >= -Enemy.getContactRange()) {
+				sonic.receiveEnemyDamage();
+			}
+			if (sonic.isAttacking() && sonic.getX() - enemy.getX() <= Enemy.getContactRange()
+					&& sonic.getX() - enemy.getX() >= -Enemy.getContactRange()
+					&& sonic.getY() - enemy.getY() <= Enemy.getContactRange()
+					&& sonic.getY() - enemy.getY() >= -Enemy.getContactRange()) {
+				if (enemy instanceof Eggman) {
+					Eggman eggman = (Eggman) enemy;
+					sonic.applyKnockback(sonic.getX() - enemy.getX());
+					eggman.setLives(eggman.getLives() - 1);
+					if (eggman.getLives() <= 0) {
+						sonic.setScore(sonic.getScore() + eggman.getPoints());
+						unsubscribeEnemy(eggman, stage.getActors());
+
+					}
+
+				}
+				if (enemy instanceof CrabMeat) {
+					CrabMeat crabmeat = (CrabMeat) enemy;
+					sonic.setScore(sonic.getScore() + crabmeat.getPoints());
+					unsubscribeEnemy(crabmeat, stage.getActors());
+				}
+				if (enemy instanceof BuzzBomber) {
+					BuzzBomber buzzbomber = (BuzzBomber) enemy;
+					sonic.setScore(sonic.getScore() + buzzbomber.getPoints());
+					unsubscribeEnemy(buzzbomber, stage.getActors());
+				}
+
+			}
+
 		}
 		handleLevelChange(stage);
 
 		checkSonicOverlapsCoin(stage);
+
+		if (sonic.tookVoidDamage()) {
+			sonic.reSpawn();
+			map.getBackground().initialPos();
+		}
+		if (sonic.isDead()) {
+
+			setInitialGameConfig(stage);
+			stage.setState(new GameOverState());
+		}
 	}
 
 	public ArrayList<JumpPad> getCloserJumpPad(GameStage stage) {
@@ -158,6 +197,7 @@ public class GameRunningState implements StageState {
 
 			removeJumpPads(map.getMapSelected(), stage);
 			removeRemainingCoins(map.getMapSelected(), stage);
+			removeRemainingEnemies(map.getMapSelected(), stage.getActors());
 
 			map.chengeMap(map.getMapSelected() + 1);
 
@@ -169,6 +209,7 @@ public class GameRunningState implements StageState {
 			sonic.setSpeedY(0);
 
 			addCoins(map.getMapSelected(), stage);
+			addEnemies(map.getMapSelected(), stage);
 
 		}
 		if (map.getMapSelected() == 2 && (sonic.getX() > map.getMapSize(map.getMapSelected()))) {
@@ -202,6 +243,7 @@ public class GameRunningState implements StageState {
 		sonic.setCoinsCollected(0);
 		sonic.setSpeedX(0);
 		sonic.setSpeedY(0);
+		sonic.setDiedToEnemy(false);
 
 		removeJumpPads(map.getMapSelected(), stage);
 		removeRemainingCoins(map.getMapSelected(), stage);
@@ -216,17 +258,6 @@ public class GameRunningState implements StageState {
 		addJumpPads(map.getMapSelected(), stage);
 	}
 
-	public void removeJumpPads(int mapId, GameStage stage) {
-		for (int i = stage.getActors().size - 1; i >= 0; i--) {
-			if (stage.getActors().get(i) instanceof JumpPad) {
-				JumpPad aux = (JumpPad) stage.getActors().get(i);
-				if (aux.getBelongingMap() == mapId) {
-					stage.getActors().removeIndex(i);
-				}
-			}
-		}
-	}
-
 	public void checkSonicOverlapsCoin(GameStage stage) {
 
 		for (int i = 0; i < stage.getActors().size; i++) {
@@ -236,6 +267,7 @@ public class GameRunningState implements StageState {
 						&& sonic.getX() - aux.getX() >= -Coin.getContactRange()
 						&& sonic.getY() - aux.getY() <= Coin.getContactRange()
 						&& sonic.getY() - aux.getY() >= -Coin.getContactRange())) {
+
 					collectCoin(aux.getId(), stage);
 				}
 			}
@@ -355,10 +387,10 @@ public class GameRunningState implements StageState {
 			stage.addActor(new Coin(26371, 704, mapId, coinAnimationManager));
 			stage.addActor(new Coin(25151, 448, mapId, coinAnimationManager));
 			stage.addActor(new Coin(26176, 320, mapId, coinAnimationManager));
-			stage.addActor(new Coin(26624, 320, mapId, coinAnimationManager));
+			stage.addActor(new Coin(26624, 384, mapId, coinAnimationManager));
 			stage.addActor(new Coin(27072 - 64, 576, mapId, coinAnimationManager));
 			stage.addActor(new Coin(28096, 448 + 64, mapId, coinAnimationManager));
-			stage.addActor(new Coin(28929, 256 + 128, mapId, coinAnimationManager));
+			stage.addActor(new Coin(28929 - 64, 256 + 128, mapId, coinAnimationManager));
 			stage.addActor(new Coin(30017, 896, mapId, coinAnimationManager));
 			stage.addActor(new Coin(29632, 1152, mapId, coinAnimationManager));
 			stage.addActor(new Coin(29632 - 64, 1152, mapId, coinAnimationManager));
@@ -367,9 +399,6 @@ public class GameRunningState implements StageState {
 			stage.addActor(new Coin(29632 - 64 * 4, 1152, mapId, coinAnimationManager));
 			stage.addActor(new Coin(31233, 960, mapId, coinAnimationManager));
 			stage.addActor(new Coin(32513, 768 + 64, mapId, coinAnimationManager));
-			stage.addActor(new Coin(32192, 320, mapId, coinAnimationManager));
-			stage.addActor(new Coin(32192, 320 + 64, mapId, coinAnimationManager));
-			stage.addActor(new Coin(32192, 320 + 128, mapId, coinAnimationManager));
 			stage.addActor(new Coin(30720, 384, mapId, coinAnimationManager));
 			stage.addActor(new Coin(34178, 320, mapId, coinAnimationManager));
 			stage.addActor(new Coin(33217, 512, mapId, coinAnimationManager));
@@ -396,6 +425,20 @@ public class GameRunningState implements StageState {
 		}
 	}
 
+	public void removeRemainingEnemies(int mapId, Array<Actor> actorsInStage) {
+		for (int i = actorsInStage.size - 1; i >= 0; i--) {
+
+			if (actorsInStage.get(i) instanceof Enemy) {
+				Enemy aux = (Enemy) actorsInStage.get(i);
+
+				if (aux.getBelongingMap() == mapId) {
+
+					unsubscribeEnemy(aux, actorsInStage);
+				}
+			}
+		}
+	}
+
 	public void addJumpPads(int mapId, GameStage stage) {
 		switch (mapId) {
 		case 1:
@@ -408,6 +451,45 @@ public class GameRunningState implements StageState {
 			stage.addActor(new JumpPad((float) 18431, 128, mapId, jumpPadsAnimationManager));
 			stage.addActor(new JumpPad((float) 18111, 576, mapId, jumpPadsAnimationManager));
 			break;
+		default:
+			break;
+		}
+	}
+
+	public void removeJumpPads(int mapId, GameStage stage) {
+		for (int i = stage.getActors().size - 1; i >= 0; i--) {
+			if (stage.getActors().get(i) instanceof JumpPad) {
+				JumpPad aux = (JumpPad) stage.getActors().get(i);
+				if (aux.getBelongingMap() == mapId) {
+					stage.getActors().removeIndex(i);
+				}
+			}
+		}
+	}
+
+	public void addEnemies(int mapId, GameStage stage) {
+		switch (mapId) {
+		case 1:
+			subscribeEnemy(new CrabMeat(2564, 640, mapId, (TiledMapTileLayer) map.getMap().getLayers().get("1")),
+					stage.getActors());
+			subscribeEnemy(new CrabMeat(3967, 128, mapId, (TiledMapTileLayer) map.getMap().getLayers().get("1")),
+					stage.getActors());
+			subscribeEnemy(new CrabMeat(4801, 576, mapId, (TiledMapTileLayer) map.getMap().getLayers().get("1")),
+					stage.getActors());
+			subscribeEnemy(new CrabMeat(5883, 576, mapId, (TiledMapTileLayer) map.getMap().getLayers().get("1")),
+					stage.getActors());
+			subscribeEnemy(new CrabMeat(12211, 512, mapId, (TiledMapTileLayer) map.getMap().getLayers().get("1")),
+					stage.getActors());
+			//subscribeEnemy(new Eggman(3000, 600, mapId), stage.getActors());
+			break;
+		case 2:
+
+			break;
+
+		case 3:
+
+			break;
+
 		default:
 			break;
 		}
@@ -447,8 +529,8 @@ public class GameRunningState implements StageState {
 		actorsInStage.removeValue((Enemy) subscriberToDelete, false);
 	}
 
-	public void sendNotification(Subscriber subscriber, float targetPos, boolean chase) {
-		subscriber.receiveUpdate(targetPos, chase);
+	public void sendNotification(Subscriber subscriber, Sonic target, boolean chase) {
+		subscriber.receiveUpdate(target, chase);
 	}
 
 }

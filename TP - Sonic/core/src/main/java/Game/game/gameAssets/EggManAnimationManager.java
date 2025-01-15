@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.Gdx;
 
 public class EggManAnimationManager extends TextureManager {
-	private Animation<TextureRegion> eggManAnimation;
 	private Animation<TextureRegion> eggManLeftAnimation;
+	private Animation<TextureRegion> eggManRightAnimation;
 	private float stateTime; 
 	private String currentAction = "movementRight";
 
@@ -19,8 +19,8 @@ public class EggManAnimationManager extends TextureManager {
 
 	@Override
 	public void loadTextures() {
-		eggManAnimation = loadAnimation("enemy3/eggMan", 5, 0.2f);
-		eggManLeftAnimation = loadAnimation("enemy3/eggManLeft", 5, 0.2f);
+		eggManLeftAnimation = loadAnimation("enemy3/eggMan", 5, 0.2f);
+		eggManRightAnimation = loadAnimation("enemy3/eggManLeft", 5, 0.2f);
 	}
 
 	private Animation<TextureRegion> loadAnimation(String basePath, int frameCount, float frameDuration) {
@@ -45,12 +45,12 @@ public class EggManAnimationManager extends TextureManager {
 		stateTime += deltaTime; 
 
 	    switch (currentAction) {
-	        case "movementRight":
-	            return eggManAnimation.getKeyFrame(stateTime, true);
 	        case "movementLeft":
 	            return eggManLeftAnimation.getKeyFrame(stateTime, true);
+	        case "movementRight":
+	            return eggManRightAnimation.getKeyFrame(stateTime, true);
 	        default:
-	            return eggManAnimation.getKeyFrame(stateTime, true);
+	            return eggManLeftAnimation.getKeyFrame(stateTime, true);
 	    }
 	}
 

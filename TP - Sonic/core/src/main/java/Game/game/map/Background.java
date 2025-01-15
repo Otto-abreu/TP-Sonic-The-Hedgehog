@@ -40,6 +40,7 @@ public class Background extends Actor {
 	}
 
 	public void initialPos() {
+
 		image.setX(initialPosition.x);
 		image.setY(initialPosition.y);
 	}
